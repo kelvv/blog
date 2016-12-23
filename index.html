@@ -16,7 +16,7 @@ description: "Chalk uses all the best tools and merges them into one premium blo
       <p>{{ post.description }}</p>
       <div class="article-list-footer">
         <span class="article-list-date">
-          {{ post.date | date: "%B %-d, %Y" }}
+          {{ post.date | date: "%Y - %m -%d" }}
         </span>
         <span class="article-list-divider">-</span>
         <span class="article-list-minutes">
@@ -24,7 +24,7 @@ description: "Chalk uses all the best tools and merges them into one premium blo
             {{ post.content | number_of_words }}
           {% endcapture %}
           {% unless words contains "-" %}
-            {{ words | plus: 250 | divided_by: 250 | append: " minute read" }}
+            {{ words | plus: 250 | divided_by: 250 | append: " 分钟阅读" }}
           {% endunless %}
         </span>
         <span class="article-list-divider">-</span>
