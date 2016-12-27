@@ -33,9 +33,14 @@ description: "Chalk uses all the best tools and merges them into one premium blo
             <a href="{{ 'tag/' | relative_url }}{{ tag }}">{{ tag }}</a>
           {% endfor %}
         </div>
+        </br>
+        <span>
+          <div class="cinc-postPanel" user-id="585e945861ff4b006cdc3151" data-key="{{ post.id }}" data-title="{{ post.title }}" isReadOnly=true></div>
+        </span>
       </div>
     </li>
   {% endfor %}
+  <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/postPanel.js" charset="UTF-8"></script>
   {% if paginator.total_pages > 1 %}
     <li class="article-pagination reveal">
       {% if paginator.previous_page %}
