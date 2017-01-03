@@ -128,17 +128,6 @@ $base-transition-speed: .2s;
 
 Chalk uses Google Fonts by default. You can change the font in `_includes/javascripts.html`.
 
-{% highlight html %}
-<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
-<script>
-  WebFont.load({
-    google: {
-      families: ['Cormorant Garamond:700', 'Lato:300,400,700']
-    }
-  });
-</script>
-{% endhighlight %}
-
 #### Footer
 
 Changing the text in the footer is easy. It can be found in `_includes/footer.html`.
