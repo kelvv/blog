@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>阿文的技术小岛 | WPF中MVVM自动更新</title>
+  <meta name="description" content="讲起WPF，开发模式MVVM是必不可少的，使用MVVM模式以后可以在View中写界面...">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="WPF中MVVM自动更新">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.kelvv.com//posts/wpf%E4%B8%ADmvvm%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0">
+  <meta property="og:description" content="讲起WPF，开发模式MVVM是必不可少的，使用MVVM模式以后可以在View中写界面...">
+  <meta property="og:site_name" content="阿文的技术小岛">
+  <meta property="og:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://blog.kelvv.com//posts/wpf%E4%B8%ADmvvm%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0">
+  <meta name="twitter:title" content="WPF中MVVM自动更新">
+  <meta name="twitter:description" content="讲起WPF，开发模式MVVM是必不可少的，使用MVVM模式以后可以在View中写界面...">
+  <meta name="twitter:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="http://blog.kelvv.com//feed.xml" type="application/rss+xml" rel="alternate" title="阿文的技术小岛 Last 10 blog posts" />
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="/" class="header-logo" title="阿文的技术小岛">阿文的技术小岛</a>
+  <div class="cinc-totalPanel" user-id="585e945861ff4b006cdc3151"></div>
+  <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/totalPanel.min.js" charset="UTF-8"></script>
+  <ul class="header-links">
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/kelvv" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:kelvv@outlook.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>WPF中MVVM自动更新</h1>
+            <p>讲起WPF，开发模式MVVM是必不可少的，使用MVVM模式以后可以在View中写界面...</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                2015 - 01 - 30
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  1 分钟阅读
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/wpf">wpf</a>
+                
+              </div>
+            </div>
+            <span >
+              <div class="cinc-postPanel" user-id="585e945861ff4b006cdc3151" data-key="/posts/WPF中MVVM自动更新" data-title="WPF中MVVM自动更新" data-url="http://blog.kelvv.com//posts/WPF中MVVM自动更新" isReadOnly=false></div>
+              <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/postPanel.min.js" charset="UTF-8"></script>
+            </span>
+          </header>
+
+          <div class="article-content">
+            <p>CleanAOP介绍:<a href="https://github.com/Jarvin-Guan/CleanAOP">https://github.com/Jarvin-Guan/CleanAOP</a></p>
+
+<h3 id="前言">前言</h3>
+<p>讲起WPF，开发模式MVVM是必不可少的，使用MVVM模式以后可以在View中写界面，需要使用到的数据则使用绑定的方式写到标签中，那么控制权就放到了ViewModel中，那么有一个需求是每一个使用MVVM者都会有的，就是在后台改变ViewModel的属性时，同时使前台View绑定的标签内容得到相应更新变动。
+定义属性方式对比</p>
+
+<h3 id="传统方式">传统方式</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>private string m_Name = "";
+public string Name
+{
+    set
+    { 
+        if(value!=m_Name){
+            m_Name = value; 
+            OnPropertyChanged( "Name" ); 
+        }
+    }
+    get { return m_Name; }
+}
+</code></pre>
+</div>
+
+<h3 id="使用cleanaop后">使用CleanAOP后</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>public virtual string Name { set; get; }
+</code></pre>
+</div>
+
+<p><strong><em>对比总结:使用传统方式使用了一大堆累赘的代码，使用CleanAOP后，简单、方便。</em></strong></p>
+
+<h3 id="实战使用cleanaop使属性自动更新">实战（使用CleanAOP使属性自动更新）</h3>
+<ol>
+  <li>
+    <p>下载<a href="http://yun.baidu.com/s/1o65ZbHS">CleanAOP2.0.0</a>,并且引用dll到项目中。</p>
+  </li>
+  <li>Notice更新类:
+    <div class="highlighter-rouge"><pre class="highlight"><code>     public class Notice : INotifyPropertyChanged, ICommand
+     {
+             public event PropertyChangedEventHandler PropertyChanged;
+
+             public void OnPropertyChanged(string name)
+             {
+                 if (PropertyChanged != null)
+                 {
+                     this.PropertyChanged(this, new  PropertyChangedEventArgs(name));
+                 }
+
+             } 
+
+             public bool CanExecute(object parameter)
+             {
+                 if (this.CanExecuteFunc != null)
+                 {
+                     return this.CanExecuteFunc(parameter);
+                 }
+                 return true;  
+             }
+             public event EventHandler CanExecuteChanged;
+
+             public void Execute(object parameter)
+             {
+                 if (this.ExecuteAction != null)
+                 {
+                     this.ExecuteAction(parameter);
+                 }
+             }
+
+             public Func&lt;object, bool&gt; CanExecuteFunc { set; get; }
+
+             public Action&lt;object&gt; ExecuteAction { set; get; }
+
+             }
+</code></pre>
+    </div>
+  </li>
+  <li>定义ViewModel:
+    <div class="highlighter-rouge"><pre class="highlight"><code>     [PropertyNotifyIntercept]//添加属性通知标签，表示该类接入属性通知拦截器。
+     //继承Notice
+     public class MainWindowVM : Notice
+     {
+           //定义Name属性
+           public virtual string Name { set; get; } = "jarvin";
+     }
+</code></pre>
+    </div>
+  </li>
+  <li>界面上绑定该属性
+    <div class="highlighter-rouge"><pre class="highlight"><code>     &lt;TextBox Text="{Binding Name}"&gt;&lt;/TextBox&gt;
+</code></pre>
+    </div>
+  </li>
+  <li>设置DataContext
+    <div class="highlighter-rouge"><pre class="highlight"><code>     public MainWindow()
+     {
+           InitializeComponent();
+           this.DataContext = InterceptClassFactory.GetInterceptClass&lt;MainWindowVM&gt;();
+     }
+</code></pre>
+    </div>
+  </li>
+  <li>修改MainWindowVM的Name的值，这时候界面上会自动做出更新！！</li>
+</ol>
+
+<h3 id="总结">总结</h3>
+<p>感谢大家使用CleanAOP,使用该方式也可以绑定命令，绑定命令的方式在Demo中会有展示，希望能给大家带来方便。大家可以<a href="http://pan.baidu.com/s/1ntxTH5B">下载Demo</a>来调试。</p>
+
+          </div>
+
+          <div class="ds-share" data-thread-key="/posts/WPF中MVVM自动更新" data-title="WPF中MVVM自动更新" data-images="" data-content="WPF中MVVM自动更新" data-url="http://blog.kelvv.com//posts/WPF中MVVM自动更新">
+              <div class="ds-share-inline">
+                <ul  class="ds-share-icons-16">
+                  
+                  <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+                  <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                  <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+                  <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+                  <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                  
+                </ul>
+                <div class="ds-share-icons-more">
+                </div>
+              </div>
+          </div>
+          <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="/posts/WPF中MVVM自动更新" data-title="WPF中MVVM自动更新" data-url="http://blog.kelvv.com//posts/WPF中MVVM自动更新"></div>
+          <!-- 多说评论框 end -->
+          <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+          <script type="text/javascript">
+          var duoshuoQuery = {short_name:"kelvv"};
+            (function() {
+              var ds = document.createElement('script');
+              ds.type = 'text/javascript';ds.async = true;
+              ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+              ds.charset = 'UTF-8';
+              (document.getElementsByTagName('head')[0] 
+              || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+            </script>
+          <!-- 多说公共JS代码 end -->
+        </article>
+        <footer class="footer reveal">
+  
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+
+
+
+
+</body>
+</html>

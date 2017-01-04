@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>阿文的技术小岛 | 在linux中给你的应用做压力测试</title>
+  <meta name="description" content="压力测试工具介绍">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="在linux中给你的应用做压力测试">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.kelvv.com//posts/%E5%9C%A8linux%E4%B8%AD%E7%BB%99%E4%BD%A0%E7%9A%84%E5%BA%94%E7%94%A8%E5%81%9A%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95">
+  <meta property="og:description" content="压力测试工具介绍">
+  <meta property="og:site_name" content="阿文的技术小岛">
+  <meta property="og:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://blog.kelvv.com//posts/%E5%9C%A8linux%E4%B8%AD%E7%BB%99%E4%BD%A0%E7%9A%84%E5%BA%94%E7%94%A8%E5%81%9A%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95">
+  <meta name="twitter:title" content="在linux中给你的应用做压力测试">
+  <meta name="twitter:description" content="压力测试工具介绍">
+  <meta name="twitter:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="http://blog.kelvv.com//feed.xml" type="application/rss+xml" rel="alternate" title="阿文的技术小岛 Last 10 blog posts" />
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="/" class="header-logo" title="阿文的技术小岛">阿文的技术小岛</a>
+  <div class="cinc-totalPanel" user-id="585e945861ff4b006cdc3151"></div>
+  <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/totalPanel.min.js" charset="UTF-8"></script>
+  <ul class="header-links">
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/kelvv" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:kelvv@outlook.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>在linux中给你的应用做压力测试</h1>
+            <p>压力测试工具介绍</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                2014 - 06 - 10
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  1 分钟阅读
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/wpf">wpf</a>
+                
+              </div>
+            </div>
+            <span >
+              <div class="cinc-postPanel" user-id="585e945861ff4b006cdc3151" data-key="/posts/在linux中给你的应用做压力测试" data-title="在linux中给你的应用做压力测试" data-url="http://blog.kelvv.com//posts/在linux中给你的应用做压力测试" isReadOnly=false></div>
+              <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/postPanel.min.js" charset="UTF-8"></script>
+            </span>
+          </header>
+
+          <div class="article-content">
+            <p>在linux中给你的应用做压力测试</p>
+
+<h2 id="一webbench">一.webbench</h2>
+
+<ol>
+  <li>在Ubuntu中安装webbench —支持get,head等请求，但不支持post请求
+    <div class="highlighter-rouge"><pre class="highlight"><code>wget http://blog.zyan.cc/soft/linux/webbench/webbench-1.5.tar.gztar zxvf webbench-1.5.tar.gzcd webbench-1.5make &amp;&amp; make install
+</code></pre>
+    </div>
+  </li>
+  <li>测试demo
+    <div class="highlighter-rouge"><pre class="highlight"><code>webbench -t 5 -c 2 http://google.com/ &gt;2个并发用户共同请求5秒
+</code></pre>
+    </div>
+  </li>
+  <li>测试结果分析
+    <div class="highlighter-rouge"><pre class="highlight"><code>Benchmarking: GET http://google.com/ ＃GET方法请求谷歌
+2 clients, running 5 sec.  #2个用户，运行5秒
+Speed=4296 pages/min, 38664 bytes/sec. #4296个页面每秒，38664 bytes每秒
+Requests: 358 susceed, 0 failed. ＃358次请求成功，0次失败
+</code></pre>
+    </div>
+  </li>
+</ol>
+
+<h2 id="二-ab">二. ab</h2>
+
+<ol>
+  <li>在Ubuntu中安装ab —支持 post ,get ,head 等方法
+    <div class="highlighter-rouge"><pre class="highlight"><code>sudo apt-get install apache2-utils
+</code></pre>
+    </div>
+  </li>
+  <li>测试demo
+    <div class="highlighter-rouge"><pre class="highlight"><code>ab -n 500 -c 2 http://www.google.com/ &gt;2个并发用户共同请求个数500个。
+</code></pre>
+    </div>
+  </li>
+  <li>测试结果分析
+    <div class="highlighter-rouge"><pre class="highlight"><code> Server Software: gws ＃服务器信息
+
+ Server Hostname: www.google.com ＃测试地址
+
+ Server Port: 80 ＃测试端口
+
+ Document Path: / ＃测试文档路径
+
+ Document Length: 390 bytes ＃测试文档大小
+
+ Concurrency Level: 2 ＃并发数量
+
+ Time taken for tests: 6.752 seconds ＃测试消耗时间
+
+ Complete requests: 500 ＃完成的请求数
+
+ Failed requests: 0 ＃失败的请求数
+
+ Non-2xx responses: 500 ＃HTTP响应数据的头信息中含有2XX以外的状态码的请求数
+
+ Total transferred: 566000 bytes #总传输数据大小
+
+ HTML transferred: 195000 bytes #总传输html数据大小
+
+ Requests per second: 74.05 [#/sec] (mean) ＃吞吐量，每秒处理平均请求数
+
+ Time per request: 27.007 [ms] (mean) #每个请求平均等待时间
+
+ Time per request: 13.504 [ms] (mean, across all concurrent requests) ＃服务器每个请求平均处理时间
+
+ Transfer rate: 81.86 [Kbytes/sec] received ＃平均每秒流量数
+    
+
+ Connection Times (ms) ＃下面为时间花费的分布（连接、处理、等待、总数）
+
+ min mean[+/-sd] median max
+
+ Connect: 1 1 0.2 1 2
+
+ Processing: 22 26 7.6 25 150
+
+ Waiting: 22 26 7.6 25 150
+
+ Total: 23 27 7.6 26 151
+
+
+
+ //下面为每个请求花费时间的分布
+
+ Percentage of the requests served within a certain time (ms)
+
+ 50% 26 ＃50%在26毫秒之内
+
+ 66% 27 ＃66%在27毫秒之内
+
+ 75% 27
+
+ 80% 27
+
+ 90% 28 ＃主要看这个参数，90%在28毫秒之内
+
+ 95% 29
+
+ 98% 36
+
+ 99% 52
+
+ 100% 151 (longest request)
+</code></pre>
+    </div>
+
+    <p>如想在请求header加入数据，如下：
+ <code class="highlighter-rouge">ab -H "Cookie: key=value;key2=value2" ...
+</code></p>
+  </li>
+  <li>利用ab 进行post请求
+    <div class="highlighter-rouge"><pre class="highlight"><code>ab -c 1 -n 100 -T 'application/json' -p data.json http://www.google.com/
+</code></pre>
+    </div>
+  </li>
+</ol>
+
+<p>测试结果就不贴上来了，多了一个明显的结果：
+<code class="highlighter-rouge">Total body sent: 15900 ＃body总的发送量</code></p>
+
+          </div>
+
+          <div class="ds-share" data-thread-key="/posts/在linux中给你的应用做压力测试" data-title="在linux中给你的应用做压力测试" data-images="" data-content="在linux中给你的应用做压力测试" data-url="http://blog.kelvv.com//posts/在linux中给你的应用做压力测试">
+              <div class="ds-share-inline">
+                <ul  class="ds-share-icons-16">
+                  
+                  <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+                  <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                  <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+                  <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+                  <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                  
+                </ul>
+                <div class="ds-share-icons-more">
+                </div>
+              </div>
+          </div>
+          <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="/posts/在linux中给你的应用做压力测试" data-title="在linux中给你的应用做压力测试" data-url="http://blog.kelvv.com//posts/在linux中给你的应用做压力测试"></div>
+          <!-- 多说评论框 end -->
+          <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+          <script type="text/javascript">
+          var duoshuoQuery = {short_name:"kelvv"};
+            (function() {
+              var ds = document.createElement('script');
+              ds.type = 'text/javascript';ds.async = true;
+              ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+              ds.charset = 'UTF-8';
+              (document.getElementsByTagName('head')[0] 
+              || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+            </script>
+          <!-- 多说公共JS代码 end -->
+        </article>
+        <footer class="footer reveal">
+  
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+
+
+
+
+</body>
+</html>

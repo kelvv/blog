@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>阿文的技术小岛 | Geek必备 - 正则表达式</title>
+  <meta name="description" content="掌握正则表达式，让你的生活更美好">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Geek必备 - 正则表达式">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.kelvv.com//posts/geek%E5%BF%85%E5%A4%87-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F">
+  <meta property="og:description" content="掌握正则表达式，让你的生活更美好">
+  <meta property="og:site_name" content="阿文的技术小岛">
+  <meta property="og:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://blog.kelvv.com//posts/geek%E5%BF%85%E5%A4%87-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F">
+  <meta name="twitter:title" content="Geek必备 - 正则表达式">
+  <meta name="twitter:description" content="掌握正则表达式，让你的生活更美好">
+  <meta name="twitter:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="http://blog.kelvv.com//feed.xml" type="application/rss+xml" rel="alternate" title="阿文的技术小岛 Last 10 blog posts" />
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="/" class="header-logo" title="阿文的技术小岛">阿文的技术小岛</a>
+  <div class="cinc-totalPanel" user-id="585e945861ff4b006cdc3151"></div>
+  <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/totalPanel.min.js" charset="UTF-8"></script>
+  <ul class="header-links">
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/kelvv" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:kelvv@outlook.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>Geek必备 - 正则表达式</h1>
+            <p>掌握正则表达式，让你的生活更美好</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                2016 - 12 - 10
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  3 分钟阅读
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/正则">正则</a>
+                
+              </div>
+            </div>
+            <span >
+              <div class="cinc-postPanel" user-id="585e945861ff4b006cdc3151" data-key="/posts/Geek必备 - 正则表达式" data-title="Geek必备 - 正则表达式" data-url="http://blog.kelvv.com//posts/Geek必备 - 正则表达式" isReadOnly=false></div>
+              <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/postPanel.min.js" charset="UTF-8"></script>
+            </span>
+          </header>
+
+          <div class="article-content">
+            <blockquote>
+  <p>正则表达式(regular expression)描述了一种字符串匹配的模式，可以用来检查一个串是否含有某种子串、将匹配的子串做替换或者从某个串中取出符合某个条件的子串等。</p>
+</blockquote>
+
+<h3 id="导语">导语</h3>
+<p>简单来说，正则表达式做两个事：</p>
+
+<ol>
+  <li>匹配</li>
+  <li>替换</li>
+</ol>
+
+<p>在无论代码生涯，还是正常生活当中，会遇到很多情况：</p>
+
+<ul>
+  <li>从html文本中获取某些信息</li>
+  <li>表单内容验证</li>
+  <li>代码批量更改名字</li>
+  <li>vim中查找内容</li>
+  <li>一堆杂乱的日志文档中找出重要信息</li>
+  <li>等等</li>
+</ul>
+
+<p>其实写代码即操作文本，正则表达式是操作文本能手，如果灵活运用自如，如虎添翼。本片文章主要说正则表达式 - 是什么、为什么、怎么样</p>
+
+<h3 id="语法一览">语法一览</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">字符</th>
+      <th style="text-align: center">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">^</td>
+      <td style="text-align: center">在单行模式中匹配文本最前面的位置 ， 在多行模式中匹配每一行的行首</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">$</td>
+      <td style="text-align: center">在单行模式中匹配文本最后面的位置 ， 在多行模式中匹配每一行的行尾</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">+</td>
+      <td style="text-align: center">匹配1个以上 ， 例如a+就是匹配 a、aaa 、aaaaa</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">？</td>
+      <td style="text-align: center">匹配0个或1个 ， 例如ab?就是匹配 a 、ab</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">*</td>
+      <td style="text-align: center">匹配0个以上 ， 例如ab*就是匹配 a 、ab  、abb 、abbbb</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">{n}</td>
+      <td style="text-align: center">匹配n个，例如ab{3}就是匹配 abbb</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">{n,}</td>
+      <td style="text-align: center">匹配n个以上，例如ab{3,}就是匹配 abbb   、abbbbb</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">{n,m}</td>
+      <td style="text-align: center">匹配n到m之间，例如ab{3,5}就是匹配 abbb 、abbbb   、abbbbb</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">\\</td>
+      <td style="text-align: center">转义符，将特殊字符变成普通字符看待 ，例如 \\\\+ 表示匹配字符+</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">.</td>
+      <td style="text-align: center">匹配非’\\n’外的任意字符</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">\\d</td>
+      <td style="text-align: center">匹配一个数字</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">\\D</td>
+      <td style="text-align: center">匹配一个非数字</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">\\s</td>
+      <td style="text-align: center">匹配一个空格</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">\\S</td>
+      <td style="text-align: center">匹配一个非空格</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">\\n</td>
+      <td style="text-align: center">匹配一个换行符</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">\\t</td>
+      <td style="text-align: center">匹配一个制表符</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">\\t</td>
+      <td style="text-align: center">匹配一个制表符</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">\\w</td>
+      <td style="text-align: center">匹配一个包含下划线在内的单词或字符，相当于[a-zA-Z0-9],例如 world_one</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">\\W</td>
+      <td style="text-align: center">匹配一个包含下划线在内的非单词</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">a\\b</td>
+      <td style="text-align: center">’或‘  语法 ，匹配 a 或者 b ，该处是<strong>竖线</strong></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">[xyz]</td>
+      <td style="text-align: center">匹配括号内包含的任意一个字符</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">[^xyz]</td>
+      <td style="text-align: center">匹配括号内未包含的任意一个字符</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">[a-z]</td>
+      <td style="text-align: center">匹配括号未包含的范围字符，该例匹配a～z任意一个字符</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">[^a-z]</td>
+      <td style="text-align: center">匹配括号内未包含的范围字符</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">(pattern)</td>
+      <td style="text-align: center">把匹配内容放到分组中</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">(?:pattern)</td>
+      <td style="text-align: center">匹配，但不放到分组中</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">(?=pattern)</td>
+      <td style="text-align: center">零宽断言 , 断言前方是pattern</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">(?!pattern)</td>
+      <td style="text-align: center">零宽断言 , 断言前方不是pattern</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">(?&lt;=pattern)</td>
+      <td style="text-align: center">零宽断言 , 断言后方是pattern</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="细细道来">细细道来</h3>
+
+<p>如需灵活运用正则表达式，必须熟悉大部分元字符的含义，并且运用于实际当中，然后多产出正则。</p>
+
+<p>在正则表达式中有几个要点：</p>
+
+<h3 id="匹配一个字符">匹配一个字符</h3>
+
+<p>匹配一个字符，有很多种方法，可以直接使用字符本身a、b、c、d，也可以使用通配符\\w、\\S、[a-z] ， 在实际情况中灵活选择。</p>
+
+<p>例如：a123bb456</p>
+
+<ul>
+  <li>
+    <p>正则可以是 “ a\\d{3}bb\\d{3} ” ， 可以理解为：“匹配a字符，接着匹配3个数字，接着匹配b字符，接着匹配b字符，最后匹配3个数字”</p>
+  </li>
+  <li>
+    <p>正则可以是 “ [a-z\\d]{9} ” ， 可以理解为：“匹配9个( a到z 或者 数字 )”</p>
+  </li>
+  <li>
+    <p>正则可以是 “ \\S{9} ” ， 可以理解为：“匹配9个非空字符”</p>
+  </li>
+</ul>
+
+<p>没有唯一的正则表达式，只有适合解决需求的正则表达式
+在写正则表达式中根据需求，思考使用的通配符是否对结果有影响，如无影响，都可以使用</p>
+
+<h3 id="转义">转义</h3>
+<p>例如需要匹配’[‘字符，因为’[‘在正则表达式中有其意义，所以可以使用\\[来匹配，就是在前面加反斜杠\\</p>
+
+<h3 id="重复匹配">重复匹配</h3>
+
+<p>重复在正则中也是最常用的通配符之一。</p>
+
+<p>例如:12345</p>
+
+<ul>
+  <li>正则是：\\d{5}  代表 “匹配5个数字“</li>
+  <li>或者是：\\d+    代表 “匹配至少1个数字,贪婪模式”</li>
+  <li>或者是：\\d*    代表 “匹配至少0个数字,贪婪模式”</li>
+  <li>或者是：\\d+?\\d{4}    代表 “匹配至少1个数字,懒惰模式,再匹配4个数字”</li>
+  <li>或者是：\\d*?\\d{5}    代表 “匹配至少0个数字,懒惰模式,再匹配5个数字”</li>
+</ul>
+
+<p>这里有一个概念</p>
+<ul>
+  <li>贪婪模式 ：           是有多少匹配多少</li>
+  <li>懒惰模式 ：      尽量少地匹配</li>
+</ul>
+
+<p>例如现在要匹配一个img标签</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"http://www.baidu.img/50B2"</span> <span class="na">style=</span><span class="s">"height:75px;"</span><span class="nt">&gt;</span></code></pre></figure>
+
+<p>正则 :
+<code class="highlighter-rouge">&lt;img src="[^"]+"[^&gt;]*&gt;</code>该处久用了贪婪模式，匹配到<code class="highlighter-rouge">[^"]+</code>的时候表示 1个以上非“的字符，所以，会匹配到50B2，因为再下去就是“了，所以贪婪也就贪婪到这里了。</p>
+
+<p>如果把正则换成 <code class="highlighter-rouge">&lt;img src="[^"]+?"[^&gt;]*&gt;</code> ，该处久用了懒惰模式，在匹配到<code class="highlighter-rouge">[^"]+?</code>的时候，匹配内容为：<code class="highlighter-rouge">&lt;img src="h</code> ，因为使用了？，用的是懒惰模式，所以，只匹配到1个字符，然后在匹配“，因为不是”，所以匹配终止，匹配不到任何内容。</p>
+
+<p>这个特性在正则中大有用处，细细理解！凡事用到了重复匹配，都可以使用？来进行懒惰的控制，默认是贪婪模式</p>
+
+<h3 id="零宽断言">零宽断言</h3>
+<p>相信对于很多初学者来说，看到断言开始都会一头雾水，下面详细说明，如何使用？</p>
+
+<p>零宽断言就是下结论，例如ab，正则：a(?=b)，匹配a并且向右看是b，得到的结果是a，断言不会在匹配的内容当中，如果是a(?=c)，则匹配不到任何内容，因为匹配a以后向右看并不是c</p>
+
+<p>如果上面的例子理解了，那么对于零宽断言就差不多了，只是看的方向不一样。</p>
+
+<ul>
+  <li>(?=pattern)     向右看是</li>
+  <li>(?!pattern)     向右看不是</li>
+  <li>(?&lt;=pattern)    向左看是 (JS不支持)</li>
+  <li>(?&lt;!pattern)    向左看不是 (JS不支持)</li>
+</ul>
+
+<p>例子：abc</p>
+
+<p>(?&lt;=a)b(?=c)  : 匹配b，并且向左看是a，向右看是c</p>
+
+<h3 id="分组">分组</h3>
+<p>分组是用于在匹配过程中，将需要的有用信息提取出来，方便使用。</p>
+
+<p>分组的通配符是括号，就是需要提取信息的地方加括号括起来</p>
+
+<p>例如还是要匹配一个img标签 ，但是我需要提取出其中的url</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt; img</span> <span class="na">src=</span><span class="s">"http://www.baidu.img/50B2"</span> <span class="nt">&gt;</span></code></pre></figure>
+
+<p><img src="http://upload-images.jianshu.io/upload_images/1952818-11e1374638204f48.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" /></p>
+
+<p>可以看到，其中分组1中的内容就是我们需要的url，当然可以使用多个括号进行多个分组的抽取</p>
+
+<p>程序中如何获取？下面给出js中的demo</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">'![](http://www.baidu.img/50B2)'</span>
+<span class="kd">var</span> <span class="nx">regex</span> <span class="o">=</span> <span class="sr">/&lt;img src="</span><span class="se">([^</span><span class="sr">"</span><span class="se">]</span><span class="sr">+</span><span class="se">)</span><span class="sr">/</span>
+<span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">content</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">regex</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> </code></pre></figure>
+
+<h3 id="选项">选项</h3>
+<p>最后说一下选项，同一正则表达式不同的选项可能回产生不同的效果。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">名称</th>
+      <th style="text-align: center">选项</th>
+      <th style="text-align: center">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">IgnoreCase</td>
+      <td style="text-align: center">i</td>
+      <td style="text-align: center">忽略大小写</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Multiline</td>
+      <td style="text-align: center">m</td>
+      <td style="text-align: center">多行模式</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">global</td>
+      <td style="text-align: center">g</td>
+      <td style="text-align: center">全局匹配</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>忽略大小写大家应该都清楚，多行模式的话就会影响^和$的匹配，在单行模式中^匹配内容的首位，在多行模式中^匹配每一行的首位，$同理。
+全局匹配的话就是匹配所有，如果不开全局匹配，则如匹配成功，则退出，结果只有一个。</p>
+
+<h3 id="推荐">推荐</h3>
+<ul>
+  <li>
+    <p>书  《精通正则表达式》《正则表达式经典实例》</p>
+  </li>
+  <li>
+    <p>在线测试工具
+<a href="http://regexr.com/">传送门</a></p>
+  </li>
+</ul>
+
+<h3 id="总结">总结</h3>
+<p>多想，多写，多运用，当对正则表达式灵活运用的时候，你会有一种翱翔天际的感觉。</p>
+
+<p>如有错误指出，望各位指出，谢谢xie x</p>
+
+          </div>
+
+          <div class="ds-share" data-thread-key="/posts/Geek必备 - 正则表达式" data-title="Geek必备 - 正则表达式" data-images="" data-content="Geek必备 - 正则表达式" data-url="http://blog.kelvv.com//posts/Geek必备 - 正则表达式">
+              <div class="ds-share-inline">
+                <ul  class="ds-share-icons-16">
+                  
+                  <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+                  <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                  <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+                  <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+                  <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                  
+                </ul>
+                <div class="ds-share-icons-more">
+                </div>
+              </div>
+          </div>
+          <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="/posts/Geek必备 - 正则表达式" data-title="Geek必备 - 正则表达式" data-url="http://blog.kelvv.com//posts/Geek必备 - 正则表达式"></div>
+          <!-- 多说评论框 end -->
+          <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+          <script type="text/javascript">
+          var duoshuoQuery = {short_name:"kelvv"};
+            (function() {
+              var ds = document.createElement('script');
+              ds.type = 'text/javascript';ds.async = true;
+              ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+              ds.charset = 'UTF-8';
+              (document.getElementsByTagName('head')[0] 
+              || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+            </script>
+          <!-- 多说公共JS代码 end -->
+        </article>
+        <footer class="footer reveal">
+  
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+
+
+
+
+</body>
+</html>

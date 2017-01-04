@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>阿文的技术小岛 | Node服务端极速搭建 －－ nvmhome</title>
+  <meta name="description" content="nodejs中，使用docker搭建服务">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Node服务端极速搭建 －－ nvmhome">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.kelvv.com//posts/node%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%9E%81%E9%80%9F%E6%90%AD%E5%BB%BA-nvmhome">
+  <meta property="og:description" content="nodejs中，使用docker搭建服务">
+  <meta property="og:site_name" content="阿文的技术小岛">
+  <meta property="og:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://blog.kelvv.com//posts/node%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%9E%81%E9%80%9F%E6%90%AD%E5%BB%BA-nvmhome">
+  <meta name="twitter:title" content="Node服务端极速搭建 －－ nvmhome">
+  <meta name="twitter:description" content="nodejs中，使用docker搭建服务">
+  <meta name="twitter:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="http://blog.kelvv.com//feed.xml" type="application/rss+xml" rel="alternate" title="阿文的技术小岛 Last 10 blog posts" />
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="/" class="header-logo" title="阿文的技术小岛">阿文的技术小岛</a>
+  <div class="cinc-totalPanel" user-id="585e945861ff4b006cdc3151"></div>
+  <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/totalPanel.min.js" charset="UTF-8"></script>
+  <ul class="header-links">
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/kelvv" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:kelvv@outlook.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>Node服务端极速搭建 －－ nvmhome</h1>
+            <p>nodejs中，使用docker搭建服务</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                2016 - 08 - 10
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  2 分钟阅读
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/nodejs">nodejs</a>
+                
+              </div>
+            </div>
+            <span >
+              <div class="cinc-postPanel" user-id="585e945861ff4b006cdc3151" data-key="/posts/Node服务端极速搭建 －－ nvmhome" data-title="Node服务端极速搭建 －－ nvmhome" data-url="http://blog.kelvv.com//posts/Node服务端极速搭建 －－ nvmhome" isReadOnly=false></div>
+              <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/postPanel.min.js" charset="UTF-8"></script>
+            </span>
+          </header>
+
+          <div class="article-content">
+            <blockquote>
+  <p>本文意在让你掌握极速搭建Node服务端（任何Project）</p>
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span> <span class="nx">whoami</span>
+<span class="nl">name</span><span class="p">:</span>        <span class="nx">kelvin</span>
+<span class="nl">email</span><span class="p">:</span>       <span class="nx">kelvv</span><span class="err">@</span><span class="nx">outlook</span><span class="p">.</span><span class="nx">com</span>
+<span class="nl">homepage</span><span class="p">:</span>    <span class="nx">www</span><span class="p">.</span><span class="nx">kelvv</span><span class="p">.</span><span class="nx">com</span>
+<span class="nl">github</span><span class="p">:</span>      <span class="nl">https</span><span class="p">:</span><span class="c1">//github.com/kelvv</span></code></pre></figure>
+
+<hr />
+<p>本文利用Docker搭建一个预安装好:</p>
+<ul>
+  <li>pm2  – Node应用的进程管理器</li>
+  <li>git     – 代码管理</li>
+  <li>ssh    – 远程登录</li>
+  <li>nvm   – node版本管理</li>
+  <li>npm   – node包安装</li>
+  <li>node  – So,you know</li>
+</ul>
+
+<p><strong>本项目github：<a href="https://github.com/kelvv/nvmhome-docker">Here</a></strong> , 欢迎Start</p>
+
+<p><strong>&gt; 当然可直接使用该镜像：</strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span> <span class="nx">docker</span> <span class="nx">pull</span> <span class="nx">kelvv</span><span class="o">/</span><span class="nx">nvmhome</span><span class="o">-</span><span class="nx">docker</span></code></pre></figure>
+
+<hr />
+
+<p>该项目由一份Dockerfile和.bashrc组成：</p>
+
+<p>Dockerfile</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">FROM</span> <span class="nx">ubuntu</span><span class="err">:</span><span class="mf">14.04</span>  
+
+<span class="nx">RUN</span> <span class="nx">apt</span><span class="o">-</span><span class="nx">get</span> <span class="nx">update</span>
+<span class="c1">//安装git ssh</span>
+<span class="nx">RUN</span> <span class="nx">apt</span><span class="o">-</span><span class="nx">get</span> <span class="nx">install</span> <span class="o">-</span><span class="nx">y</span> <span class="nx">curl</span> <span class="nx">git</span><span class="o">-</span><span class="nx">all</span> <span class="nx">openssh</span><span class="o">-</span><span class="nx">server</span>
+<span class="nx">ADD</span> <span class="p">.</span><span class="nx">bashrc</span> <span class="o">/</span><span class="nx">root</span><span class="o">/</span><span class="p">.</span><span class="nx">bashrc</span>
+
+<span class="c1">//nvm安装</span>
+<span class="nx">RUN</span> <span class="nx">curl</span> <span class="o">-</span><span class="nx">o</span><span class="o">-</span> <span class="nx">https</span><span class="err">:</span><span class="c1">//raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash</span>
+<span class="nx">RUN</span> <span class="p">.</span> <span class="o">/</span><span class="nx">root</span><span class="o">/</span><span class="p">.</span><span class="nx">bashrc</span><span class="p">;</span><span class="nx">nvm</span> <span class="nx">install</span> <span class="mf">4.3</span><span class="p">.</span><span class="mi">1</span><span class="p">;</span><span class="nx">nvm</span> <span class="nx">use</span> <span class="mf">4.3</span><span class="p">.</span><span class="mi">1</span><span class="p">;</span><span class="nx">npm</span> <span class="nx">install</span> <span class="nx">pm2</span> <span class="o">-</span><span class="nx">g</span><span class="p">;</span><span class="nx">pm2</span> <span class="nx">startup</span> <span class="nx">ubuntu</span>
+         
+<span class="nx">RUN</span> <span class="nx">mkdir</span> <span class="o">/</span><span class="kd">var</span><span class="sr">/run/</span><span class="nx">sshd</span>
+<span class="nx">RUN</span> <span class="nx">echo</span> <span class="s1">'root:myssh'</span> <span class="o">|</span> <span class="nx">chpasswd</span>
+<span class="nx">RUN</span> <span class="nx">sed</span> <span class="o">-</span><span class="nx">i</span> <span class="s1">'s/PermitRootLogin without-password/PermitRootLogin yes/'</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">ssh</span><span class="o">/</span><span class="nx">sshd_config</span>
+
+<span class="c1">//SSH登录</span>
+<span class="nx">RUN</span> <span class="nx">sed</span> <span class="s1">'s@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g'</span> <span class="o">-</span><span class="nx">i</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">pam</span><span class="p">.</span><span class="nx">d</span><span class="o">/</span><span class="nx">sshd</span>
+
+<span class="nx">ENV</span> <span class="nx">NOTVISIBLE</span> <span class="s2">"in users profile"</span>
+<span class="nx">RUN</span> <span class="nx">echo</span> <span class="s2">"export VISIBLE=now"</span> <span class="o">&gt;&gt;</span> <span class="sr">/etc/</span><span class="nx">profile</span>
+    
+<span class="c1">//对外开放端口</span>
+<span class="nx">EXPOSE</span> <span class="mi">22</span>  
+<span class="nx">EXPOSE</span> <span class="mi">80</span>
+    
+<span class="nx">CMD</span> <span class="p">[</span><span class="s2">"/usr/sbin/sshd"</span><span class="p">,</span> <span class="s2">"-D"</span><span class="p">]</span> </code></pre></figure>
+
+<p>上面给出了简单的注释，下面补充说明一下</p>
+<ol>
+  <li>ADD .bashrc /root/.bashrc  为什么需要把.bashrc添加进去呢？因为里面把<strong>互动</strong>去掉，这样pm2环境变量才能生效。</li>
+  <li>默认ssh的密码为：’myssh’，如有需要，自行添加ssh无密登录，我对该技术有文章：<a href="http://www.jianshu.com/p/27d8b8d1d571">传送门</a></li>
+  <li>该镜像对外开放两个端口，
+    <ul>
+      <li><strong>22:  ssh端口</strong></li>
+      <li><strong>80:  默认网站端口</strong></li>
+    </ul>
+  </li>
+  <li>大家可以以该Dockerfile为基础，继续写属于自己应用的Dockerfile。Happy Node</li>
+</ol>
+
+<h2 id="使用">使用</h2>
+
+<ul>
+  <li>使用该镜像
+连接到服务器，执行以下命令</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span> <span class="nx">docker</span> <span class="nx">pull</span> <span class="nx">kelvv</span><span class="o">/</span><span class="nx">nvmhome</span><span class="o">-</span><span class="nx">docker</span>
+<span class="nx">$</span> <span class="nx">docker</span> <span class="nx">run</span> <span class="o">-</span><span class="nx">p</span> <span class="mf">0.0</span><span class="p">.</span><span class="mf">0.0</span><span class="err">:</span><span class="mi">3000</span><span class="err">:</span><span class="mi">22</span> <span class="o">-</span><span class="nx">p</span> <span class="mf">0.0</span><span class="p">.</span><span class="mf">0.0</span><span class="err">:</span><span class="mi">80</span><span class="err">:</span><span class="mi">80</span> <span class="o">-</span><span class="nx">d</span> <span class="nx">kelvv</span><span class="o">/</span><span class="nx">nvmhome</span><span class="o">-</span><span class="nx">docker</span></code></pre></figure>
+
+<p>你可以回到自己的电脑，使用ssh root@xxx.xxx.xxx.xxx连接到刚创建的应用服务端，自由发挥。</p>
+
+<ul>
+  <li>对该镜像有改进，需重新构建
+连接到服务器，下载Dockerfile，修改后执行以下命令</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span> <span class="nx">docker</span> <span class="nx">build</span> <span class="o">-</span><span class="nx">t</span> <span class="nx">name</span> <span class="p">.</span>   
+<span class="nx">$</span> <span class="nx">docker</span> <span class="nx">run</span> <span class="o">-</span><span class="nx">p</span> <span class="mf">0.0</span><span class="p">.</span><span class="mf">0.0</span><span class="err">:</span><span class="mi">3000</span><span class="err">:</span><span class="mi">22</span> <span class="o">-</span><span class="nx">p</span> <span class="mf">0.0</span><span class="p">.</span><span class="mf">0.0</span><span class="err">:</span><span class="mi">80</span><span class="err">:</span><span class="mi">80</span> <span class="o">-</span><span class="nx">d</span> <span class="nx">name</span></code></pre></figure>
+
+<h2 id="总结">总结</h2>
+
+<p>以上已经建立好基础，下一篇文章会说说：如何使用nvmhome＋pm2，一键发布、管理自己的应用，，是一个很简单的个人主页,希望你们喜欢！</p>
+
+<p>我的个人主页就是这样部署的：<a href="http://www.kelvv.com/">Homepage传送门</a></p>
+
+          </div>
+
+          <div class="ds-share" data-thread-key="/posts/Node服务端极速搭建 －－ nvmhome" data-title="Node服务端极速搭建 －－ nvmhome" data-images="" data-content="Node服务端极速搭建 －－ nvmhome" data-url="http://blog.kelvv.com//posts/Node服务端极速搭建 －－ nvmhome">
+              <div class="ds-share-inline">
+                <ul  class="ds-share-icons-16">
+                  
+                  <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+                  <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                  <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+                  <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+                  <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                  
+                </ul>
+                <div class="ds-share-icons-more">
+                </div>
+              </div>
+          </div>
+          <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="/posts/Node服务端极速搭建 －－ nvmhome" data-title="Node服务端极速搭建 －－ nvmhome" data-url="http://blog.kelvv.com//posts/Node服务端极速搭建 －－ nvmhome"></div>
+          <!-- 多说评论框 end -->
+          <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+          <script type="text/javascript">
+          var duoshuoQuery = {short_name:"kelvv"};
+            (function() {
+              var ds = document.createElement('script');
+              ds.type = 'text/javascript';ds.async = true;
+              ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+              ds.charset = 'UTF-8';
+              (document.getElementsByTagName('head')[0] 
+              || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+            </script>
+          <!-- 多说公共JS代码 end -->
+        </article>
+        <footer class="footer reveal">
+  
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+
+
+
+
+</body>
+</html>

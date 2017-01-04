@@ -1,4 +1,0 @@
----
-slug: wpf
-name: wpf
----

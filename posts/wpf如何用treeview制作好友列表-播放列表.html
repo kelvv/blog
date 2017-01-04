@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>阿文的技术小岛 | WPF如何用TreeView制作好友列表、播放列表</title>
+  <meta name="description" content="TreeView这个控件对于我来说是用得比较多的，以前做的小聊天软件(好友列表)、音乐播放器(播放列表)、类库展示器(树形类结构)等都用的是TreeView，下面以一个好友列表为...">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="WPF如何用TreeView制作好友列表、播放列表">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.kelvv.com//posts/wpf%E5%A6%82%E4%BD%95%E7%94%A8treeview%E5%88%B6%E4%BD%9C%E5%A5%BD%E5%8F%8B%E5%88%97%E8%A1%A8-%E6%92%AD%E6%94%BE%E5%88%97%E8%A1%A8">
+  <meta property="og:description" content="TreeView这个控件对于我来说是用得比较多的，以前做的小聊天软件(好友列表)、音乐播放器(播放列表)、类库展示器(树形类结构)等都用的是TreeView，下面以一个好友列表为...">
+  <meta property="og:site_name" content="阿文的技术小岛">
+  <meta property="og:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://blog.kelvv.com//posts/wpf%E5%A6%82%E4%BD%95%E7%94%A8treeview%E5%88%B6%E4%BD%9C%E5%A5%BD%E5%8F%8B%E5%88%97%E8%A1%A8-%E6%92%AD%E6%94%BE%E5%88%97%E8%A1%A8">
+  <meta name="twitter:title" content="WPF如何用TreeView制作好友列表、播放列表">
+  <meta name="twitter:description" content="TreeView这个控件对于我来说是用得比较多的，以前做的小聊天软件(好友列表)、音乐播放器(播放列表)、类库展示器(树形类结构)等都用的是TreeView，下面以一个好友列表为...">
+  <meta name="twitter:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="http://blog.kelvv.com//feed.xml" type="application/rss+xml" rel="alternate" title="阿文的技术小岛 Last 10 blog posts" />
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="/" class="header-logo" title="阿文的技术小岛">阿文的技术小岛</a>
+  <div class="cinc-totalPanel" user-id="585e945861ff4b006cdc3151"></div>
+  <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/totalPanel.min.js" charset="UTF-8"></script>
+  <ul class="header-links">
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/kelvv" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:kelvv@outlook.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>WPF如何用TreeView制作好友列表、播放列表</h1>
+            <p>TreeView这个控件对于我来说是用得比较多的，以前做的小聊天软件(好友列表)、音乐播放器(播放列表)、类库展示器(树形类结构)等都用的是TreeView，下面以一个好友列表为...</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                2015 - 07 - 05
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  5 分钟阅读
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/wpf">wpf</a>
+                
+              </div>
+            </div>
+            <span >
+              <div class="cinc-postPanel" user-id="585e945861ff4b006cdc3151" data-key="/posts/WPF如何用TreeView制作好友列表、播放列表" data-title="WPF如何用TreeView制作好友列表、播放列表" data-url="http://blog.kelvv.com//posts/WPF如何用TreeView制作好友列表、播放列表" isReadOnly=false></div>
+              <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/postPanel.min.js" charset="UTF-8"></script>
+            </span>
+          </header>
+
+          <div class="article-content">
+            <h3 id="前言">前言</h3>
+<p>　　TreeView这个控件对于我来说是用得比较多的，以前做的小聊天软件(好友列表)、音乐播放器(播放列表)、类库展示器(树形类结构)等都用的是TreeView，下面以一个好友列表为例，说明一下制作过程，这个过程可以搬迁到其他类似的场景中去(树形结构的场景)。</p>
+
+<h3 id="结果展示">结果展示</h3>
+<p>　　</p>
+
+<p><img src="http://upload-images.jianshu.io/upload_images/1952818-f23b0ee3985bf074.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" /></p>
+
+<h3 id="制作过程">制作过程</h3>
+<p>　　1. 新建一个WPF工程，我命名为TreeViewDemo。（这步不解释）</p>
+
+<p>　　2. 准备图片，就是系统头像。在工程中新建一个Heads文件夹，并且添加系统头像图片，最后不要忘记需要把生成方式改为Resource、不复制，这样才能用标准的Pack URI的方式来读取到图片。(我喜欢用Pack Uri，因为比较通用，安全)  下载头像</p>
+
+<p>　　3. 好了，资源图片准备好了以后，来定义数据类，在这里我们需要用到两个类，一个代表好友，一个代表好友列表(对应的音乐播放器就是音乐和音乐列表)。</p>
+
+<p>Friend(好友)</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Friend</span>
+    <span class="o">{</span>
+        <span class="kd">public</span> <span class="nf">Friend</span><span class="o">(</span><span class="n">FriendList</span> <span class="n">list</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">List</span> <span class="o">=</span> <span class="n">list</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">//头像的路径</span>
+        <span class="kd">public</span> <span class="n">String</span> <span class="n">HeadPath</span> <span class="o">{</span> <span class="n">set</span><span class="o">;</span> <span class="n">get</span><span class="o">;</span> <span class="o">}</span>
+        <span class="c1">//好友名字</span>
+        <span class="kd">public</span> <span class="n">String</span> <span class="n">Name</span> <span class="o">{</span> <span class="n">set</span><span class="o">;</span> <span class="n">get</span><span class="o">;</span> <span class="o">}</span>
+        <span class="c1">//签名</span>
+        <span class="kd">public</span> <span class="n">String</span> <span class="n">Autograph</span> <span class="o">{</span> <span class="n">set</span><span class="o">;</span> <span class="n">get</span><span class="o">;</span> <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="n">FriendList</span> <span class="n">List</span> <span class="o">{</span> <span class="n">set</span><span class="o">;</span> <span class="n">get</span><span class="o">;</span> <span class="o">}</span>
+
+    <span class="o">}</span></code></pre></figure>
+
+<p>FriendList(好友列表</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">FriendList</span>
+    <span class="o">{</span>
+        <span class="kd">public</span> <span class="nf">FriendList</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">ListName</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kd">public</span> <span class="n">String</span> <span class="n">ListName</span> <span class="o">{</span> <span class="n">set</span><span class="o">;</span> <span class="n">get</span><span class="o">;</span> <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="n">ObservableCollection</span><span class="o">&lt;</span><span class="n">Friend</span><span class="o">&gt;</span> <span class="n">_friends</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ObservableCollection</span><span class="o">&lt;</span><span class="n">Friend</span><span class="o">&gt;();</span>
+        <span class="kd">public</span> <span class="n">ObservableCollection</span><span class="o">&lt;</span><span class="n">Friend</span><span class="o">&gt;</span> <span class="n">Friends</span>
+        <span class="o">{</span>
+            <span class="kd">private</span> <span class="n">set</span><span class="o">{}</span>
+            <span class="n">get</span>
+            <span class="o">{</span>
+                <span class="k">return</span> <span class="n">_friends</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">AddFriend</span><span class="o">(</span><span class="n">Friend</span> <span class="n">newFriend</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">_friends</span><span class="o">.</span><span class="na">Add</span><span class="o">(</span><span class="n">newFriend</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">RemoveFriend</span><span class="o">(</span><span class="n">Friend</span> <span class="n">friend</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">_friends</span><span class="o">.</span><span class="na">Remove</span><span class="o">(</span><span class="n">friend</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span></code></pre></figure>
+
+<p>　　4. 这一步是重点，就是在一个TreeView的节点中，如何去区分Friend和FriendList呢?我使用模板，我分别为Friend和FriendList定义属于它们各自的模板，一起定义在一个字典中，新建一个字典，我命名为GlobeDictionary。这里应该要用的是数据模板(DataTemplate)，系统有一个数据模板叫HierarchicalDataTemplate，这个模板专门用于有头部和子数据的数据结构的，用在这个TreeView中刚好合适。</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;ResourceDictionary</span> <span class="na">xmlns=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span>
+                    <span class="na">xmlns:x=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml"</span>
+                    <span class="na">xmlns:local=</span><span class="s">"clr-namespace:TreeViewDemo"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;HierarchicalDataTemplate</span> <span class="na">DataType=</span><span class="s">"{x:Type local:FriendList}"</span> <span class="na">ItemsSource=</span><span class="s">"{Binding Path=Friends,UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"</span> <span class="na">x:Key=</span><span class="s">"ListTemple"</span> <span class="nt">&gt;</span>
+        <span class="nt">&lt;Border</span> <span class="na">x:Name=</span><span class="s">"bord"</span> <span class="na">Margin=</span><span class="s">"-1,-1,0,-1"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;TextBlock</span> <span class="na">Text=</span><span class="s">"{Binding Path=ListName, Mode=TwoWay}"</span> <span class="na">HorizontalAlignment=</span><span class="s">"Left"</span> <span class="na">Width=</span><span class="s">"227"</span> <span class="na">Padding=</span><span class="s">"2"</span> <span class="na">FontSize=</span><span class="s">"15"</span><span class="nt">&gt;&lt;/TextBlock&gt;</span>
+        <span class="nt">&lt;/Border&gt;</span>
+    <span class="nt">&lt;/HierarchicalDataTemplate&gt;</span>
+    <span class="nt">&lt;HierarchicalDataTemplate</span> <span class="na">DataType=</span><span class="s">"{x:Type local:Friend}"</span>  <span class="na">x:Key=</span><span class="s">"FriendTemple"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;Grid&gt;</span>
+            <span class="nt">&lt;Grid.ColumnDefinitions&gt;</span>
+                <span class="nt">&lt;ColumnDefinition</span> <span class="na">Width=</span><span class="s">"40"</span><span class="nt">&gt;&lt;/ColumnDefinition&gt;</span>
+                <span class="nt">&lt;ColumnDefinition</span> <span class="na">Width=</span><span class="s">"150"</span><span class="nt">&gt;&lt;/ColumnDefinition&gt;</span>
+            <span class="nt">&lt;/Grid.ColumnDefinitions&gt;</span>
+            <span class="nt">&lt;Image</span> <span class="na">Source=</span><span class="s">"{Binding Path=HeadPath}"</span> <span class="nt">&gt;&lt;/Image&gt;</span>
+            <span class="nt">&lt;StackPanel</span> <span class="na">Orientation=</span><span class="s">"Horizontal"</span> <span class="na">Grid.Column=</span><span class="s">"1"</span> <span class="na">Margin=</span><span class="s">"6,2,2,2"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;StackPanel</span> <span class="na">Orientation=</span><span class="s">"Vertical"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;TextBlock</span> <span class="na">Text=</span><span class="s">"{Binding Path=Name}"</span>  <span class="na">Height=</span><span class="s">"25"</span> <span class="na">HorizontalAlignment=</span><span class="s">"Left"</span> <span class="nt">&gt;&lt;/TextBlock&gt;</span>
+                    <span class="nt">&lt;TextBlock</span> <span class="na">Text=</span><span class="s">"{Binding Path=Autograph}"</span>  <span class="na">Height=</span><span class="s">"20"</span> <span class="na">HorizontalAlignment=</span><span class="s">"Left"</span><span class="nt">&gt;&lt;/TextBlock&gt;</span>
+                <span class="nt">&lt;/StackPanel&gt;</span>
+            <span class="nt">&lt;/StackPanel&gt;</span>
+        <span class="nt">&lt;/Grid&gt;</span>
+    <span class="nt">&lt;/HierarchicalDataTemplate&gt;</span>
+    
+<span class="nt">&lt;/ResourceDictionary&gt;</span></code></pre></figure>
+
+<p>　　（注意：因为需要再这里引用自定义类，所以命名空间local的引入一定要正确，冲上面的定义可以看出，好友列表只显示名字，好友就用Grid来组织一个类QQ的布局，头像，签名等。）</p>
+
+<p>　　5. 主界面。</p>
+
+<p>　　主界面比较简单，在这个Demo中，只使用TreeView控件。</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;Window</span> <span class="na">x:Class=</span><span class="s">"TreeViewDemo.MainWindow"</span>
+        <span class="na">xmlns=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span>
+        <span class="na">xmlns:x=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml"</span>
+        <span class="na">xmlns:local=</span><span class="s">"clr-namespace:TreeViewDemo"</span>
+        <span class="na">Title=</span><span class="s">"MainWindow"</span> <span class="na">Height=</span><span class="s">"401"</span> <span class="na">Width=</span><span class="s">"305"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;Grid&gt;</span>
+        <span class="nt">&lt;TreeView</span> <span class="na">x:Name=</span><span class="s">"ListTV"</span> <span class="nt">&gt;&lt;/TreeView&gt;</span>
+    <span class="nt">&lt;/Grid&gt;</span>
+<span class="nt">&lt;/Window&gt;</span></code></pre></figure>
+
+<p>　　</p>
+
+<p>　　6. 有了躯壳，我们填入灵魂(数据绑定和数据模板应用)。</p>
+
+<p>　　模板有两个，直接填充TreeView的ItemTemplate属性是不行的，但是WPF中有一个思想很重要（Selector、Converter等），在TreeView中有一个属性ItemTemplateSelector。所以，新建一个Selector类，继承DataTemplateSelector：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">FriendOrListTemplateSelector</span> <span class="o">:</span> <span class="n">DataTemplateSelector</span>
+    <span class="o">{</span>
+        <span class="kd">public</span> <span class="n">override</span> <span class="n">DataTemplate</span> <span class="nf">SelectTemplate</span><span class="o">(</span><span class="n">object</span> <span class="n">item</span><span class="o">,</span> <span class="n">DependencyObject</span> <span class="n">container</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">ResourceDictionary</span> <span class="n">directory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ResourceDictionary</span><span class="o">();</span>
+            <span class="n">directory</span><span class="o">.</span><span class="na">Source</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="o">(</span><span class="s">"pack://Application:,,,/GlobeDictionary.xaml"</span><span class="o">,</span> <span class="n">UriKind</span><span class="o">.</span><span class="na">RelativeOrAbsolute</span><span class="o">);</span><span class="c1">//使用pack uri载入模板字典</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">item</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">item</span> <span class="n">is</span> <span class="n">FriendList</span><span class="o">)</span>
+            <span class="o">{</span>
+                <span class="k">return</span> <span class="n">directory</span><span class="o">[</span><span class="s">"ListTemple"</span><span class="o">]</span> <span class="n">as</span> <span class="n">DataTemplate</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">directory</span><span class="o">[</span><span class="s">"FriendTemple"</span><span class="o">]</span> <span class="n">as</span> <span class="n">DataTemplate</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span></code></pre></figure>
+
+<p>　　首先使用pack uri加载位于当前exe程序集中的字典资源(如果加载不了，请将字典生成方式改为Resource)，然后根据传入的数据类型来返回对应的DataTemplate，这样就能有效的自动选择模板。</p>
+
+<p>　　模板能自动选择了，另外数据怎么提供呢，我们使用在WPF中最常用的DataContext绑定来填充ItemsSource。下面看主界面的完整代码。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">&lt;</span><span class="n">Window</span> <span class="nl">x:</span><span class="n">Class</span><span class="o">=</span><span class="s">"TreeViewDemo.MainWindow"</span>
+        <span class="n">xmlns</span><span class="o">=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span>
+        <span class="nl">xmlns:</span><span class="n">x</span><span class="o">=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml"</span>
+        <span class="nl">xmlns:</span><span class="n">local</span><span class="o">=</span><span class="s">"clr-namespace:TreeViewDemo"</span>
+        <span class="n">Title</span><span class="o">=</span><span class="s">"MainWindow"</span> <span class="n">Height</span><span class="o">=</span><span class="s">"401"</span> <span class="n">Width</span><span class="o">=</span><span class="s">"305"</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">Grid</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">Grid</span><span class="o">.</span><span class="na">Resources</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nl">local:</span><span class="n">FriendOrListTemplateSelector</span> <span class="nl">x:</span><span class="n">Key</span><span class="o">=</span><span class="s">"Myselector"</span><span class="o">&gt;&lt;/</span><span class="nl">local:</span><span class="n">FriendOrListTemplateSelector</span><span class="o">&gt;</span>
+        <span class="o">&lt;/</span><span class="n">Grid</span><span class="o">.</span><span class="na">Resources</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">TreeView</span> <span class="nl">x:</span><span class="n">Name</span><span class="o">=</span><span class="s">"ListTV"</span> 
+                  <span class="n">ItemsSource</span><span class="o">=</span><span class="s">"{Binding Path=DataContext, Mode=TwoWay,RelativeSource={RelativeSource Mode=Self}}"</span>
+                  <span class="n">ItemTemplateSelector</span><span class="o">=</span><span class="s">"{StaticResource Myselector}"</span> <span class="o">&gt;</span>
+        <span class="o">&lt;/</span><span class="n">TreeView</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">Grid</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">Window</span><span class="o">&gt;</span></code></pre></figure>
+
+<p>　　这里的命名空间local是FriendOrListTemplateSelector所在的命名空间中，请填写对。最后在主界面的代码中加入数据，测试一下。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">partial</span> <span class="kd">class</span> <span class="nc">MainWindow</span> <span class="o">:</span> <span class="n">Window</span>
+    <span class="o">{</span>
+        <span class="kd">public</span> <span class="nf">MainWindow</span><span class="o">()</span>
+        <span class="o">{</span>
+            <span class="n">InitializeComponent</span><span class="o">();</span>
+            <span class="n">ObservableCollection</span><span class="o">&lt;</span><span class="n">FriendList</span><span class="o">&gt;</span> <span class="n">Root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ObservableCollection</span><span class="o">&lt;</span><span class="n">FriendList</span><span class="o">&gt;();</span>
+            <span class="n">FriendList</span> <span class="n">listOne</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FriendList</span><span class="o">(</span><span class="s">"高中同学"</span><span class="o">);</span>
+            <span class="n">Friend</span> <span class="n">friend1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Friend</span><span class="o">(</span><span class="n">listOne</span><span class="o">)</span> <span class="o">{</span> <span class="n">Autograph</span> <span class="o">=</span> <span class="s">"今天很开心，遇到了XX"</span><span class="o">,</span> <span class="n">HeadPath</span> <span class="o">=</span> <span class="s">"Heads/h1.png"</span><span class="o">,</span> <span class="n">Name</span> <span class="o">=</span> <span class="s">"天煞"</span> <span class="o">};</span>
+            <span class="n">Friend</span> <span class="n">friend2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Friend</span><span class="o">(</span><span class="n">listOne</span><span class="o">)</span> <span class="o">{</span> <span class="n">Autograph</span> <span class="o">=</span> <span class="s">"非一般的感觉"</span><span class="o">,</span> <span class="n">HeadPath</span> <span class="o">=</span> <span class="s">"Heads/h2.png"</span><span class="o">,</span> <span class="n">Name</span> <span class="o">=</span> <span class="s">"Basx"</span> <span class="o">};</span>
+            <span class="n">Friend</span> <span class="n">friend3</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Friend</span><span class="o">(</span><span class="n">listOne</span><span class="o">)</span> <span class="o">{</span> <span class="n">Autograph</span> <span class="o">=</span> <span class="s">"WER"</span><span class="o">,</span> <span class="n">HeadPath</span> <span class="o">=</span> <span class="s">"Heads/h3.png"</span><span class="o">,</span> <span class="n">Name</span> <span class="o">=</span> <span class="s">"Paul"</span> <span class="o">};</span>
+            <span class="n">Friend</span> <span class="n">friend4</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Friend</span><span class="o">(</span><span class="n">listOne</span><span class="o">)</span> <span class="o">{</span> <span class="n">Autograph</span> <span class="o">=</span> <span class="s">"~终于完成作业了~~!"</span><span class="o">,</span> <span class="n">HeadPath</span> <span class="o">=</span> <span class="s">"Heads/h4.png"</span><span class="o">,</span> <span class="n">Name</span> <span class="o">=</span> <span class="s">"孤星月"</span> <span class="o">};</span>
+            <span class="n">listOne</span><span class="o">.</span><span class="na">AddFriend</span><span class="o">(</span><span class="n">friend1</span><span class="o">);</span>
+            <span class="n">listOne</span><span class="o">.</span><span class="na">AddFriend</span><span class="o">(</span><span class="n">friend2</span><span class="o">);</span>
+            <span class="n">listOne</span><span class="o">.</span><span class="na">AddFriend</span><span class="o">(</span><span class="n">friend3</span><span class="o">);</span>
+            <span class="n">listOne</span><span class="o">.</span><span class="na">AddFriend</span><span class="o">(</span><span class="n">friend4</span><span class="o">);</span>
+            <span class="n">FriendList</span> <span class="n">listTwo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FriendList</span><span class="o">(</span><span class="s">"大一"</span><span class="o">);</span>
+            <span class="n">Friend</span> <span class="n">friend5</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Friend</span><span class="o">(</span><span class="n">listOne</span><span class="o">)</span> <span class="o">{</span> <span class="n">Autograph</span> <span class="o">=</span> <span class="s">"你的存在"</span><span class="o">,</span> <span class="n">HeadPath</span> <span class="o">=</span> <span class="s">"Heads/h5.png"</span><span class="o">,</span> <span class="n">Name</span> <span class="o">=</span> <span class="s">"菲菲"</span> <span class="o">};</span>
+            <span class="n">listTwo</span><span class="o">.</span><span class="na">AddFriend</span><span class="o">(</span><span class="n">friend5</span><span class="o">);</span>
+            <span class="n">Root</span><span class="o">.</span><span class="na">Add</span><span class="o">(</span><span class="n">listOne</span><span class="o">);</span>
+            <span class="n">Root</span><span class="o">.</span><span class="na">Add</span><span class="o">(</span><span class="n">listTwo</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">ListTV</span><span class="o">.</span><span class="na">DataContext</span> <span class="o">=</span> <span class="n">Root</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span></code></pre></figure>
+
+<p>　　大功告成~！</p>
+
+<h3 id="总结">总结</h3>
+
+<p>过程比较简单，但是最重要的是学习其方法，有几点通用的知识需要注意的：</p>
+
+<ol>
+  <li>
+    <p>Xaml中需要使用自定义类的时候，需要在头部xmlns中添加一项，并且确保命名空间是对的。</p>
+  </li>
+  <li>
+    <p>Pack URI的使用，任何资源的引用都可以使用Pack URI，下面举两个例子：</p>
+
+    <p>*pack://Application:,,,/路径/路径/文件名（带后缀）    &lt;-这种方式是引用当前程序集的Resouce资源的。</p>
+
+    <p>*pack://Application:,,,/引用的程序集名称;component/路径/路径/文件名（带后缀）&lt;-这种方式是引用其他程序集的Resouce资源的。</p>
+  </li>
+  <li>
+    <p>选择器(Selecter)，转换器(Converter)等的思想要深入理解。</p>
+  </li>
+  <li>
+    <p>数据模板是为数据定制外观，例如这里就为Friend和FriendList定制了外观了。</p>
+  </li>
+</ol>
+
+<p><a href="http://files.cnblogs.com/Jarvin/TreeViewDemo.rar">完整Demo下载</a></p>
+
+          </div>
+
+          <div class="ds-share" data-thread-key="/posts/WPF如何用TreeView制作好友列表、播放列表" data-title="WPF如何用TreeView制作好友列表、播放列表" data-images="" data-content="WPF如何用TreeView制作好友列表、播放列表" data-url="http://blog.kelvv.com//posts/WPF如何用TreeView制作好友列表、播放列表">
+              <div class="ds-share-inline">
+                <ul  class="ds-share-icons-16">
+                  
+                  <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+                  <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                  <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+                  <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+                  <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                  
+                </ul>
+                <div class="ds-share-icons-more">
+                </div>
+              </div>
+          </div>
+          <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="/posts/WPF如何用TreeView制作好友列表、播放列表" data-title="WPF如何用TreeView制作好友列表、播放列表" data-url="http://blog.kelvv.com//posts/WPF如何用TreeView制作好友列表、播放列表"></div>
+          <!-- 多说评论框 end -->
+          <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+          <script type="text/javascript">
+          var duoshuoQuery = {short_name:"kelvv"};
+            (function() {
+              var ds = document.createElement('script');
+              ds.type = 'text/javascript';ds.async = true;
+              ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+              ds.charset = 'UTF-8';
+              (document.getElementsByTagName('head')[0] 
+              || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+            </script>
+          <!-- 多说公共JS代码 end -->
+        </article>
+        <footer class="footer reveal">
+  
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+
+
+
+
+</body>
+</html>

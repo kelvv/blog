@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>阿文的技术小岛 | WPF多线程UI更新——两种方法</title>
+  <meta name="description" content="在WPF中，在使用多线程在后台进行计算限制的异步操作的时候，如果在后台线程中...">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="WPF多线程UI更新——两种方法">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.kelvv.com//posts/wpf%E5%A4%9A%E7%BA%BF%E7%A8%8Bui%E6%9B%B4%E6%96%B0-%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95">
+  <meta property="og:description" content="在WPF中，在使用多线程在后台进行计算限制的异步操作的时候，如果在后台线程中...">
+  <meta property="og:site_name" content="阿文的技术小岛">
+  <meta property="og:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://blog.kelvv.com//posts/wpf%E5%A4%9A%E7%BA%BF%E7%A8%8Bui%E6%9B%B4%E6%96%B0-%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95">
+  <meta name="twitter:title" content="WPF多线程UI更新——两种方法">
+  <meta name="twitter:description" content="在WPF中，在使用多线程在后台进行计算限制的异步操作的时候，如果在后台线程中...">
+  <meta name="twitter:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="http://blog.kelvv.com//feed.xml" type="application/rss+xml" rel="alternate" title="阿文的技术小岛 Last 10 blog posts" />
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="/" class="header-logo" title="阿文的技术小岛">阿文的技术小岛</a>
+  <div class="cinc-totalPanel" user-id="585e945861ff4b006cdc3151"></div>
+  <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/totalPanel.min.js" charset="UTF-8"></script>
+  <ul class="header-links">
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/kelvv" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:kelvv@outlook.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>WPF多线程UI更新——两种方法</h1>
+            <p>在WPF中，在使用多线程在后台进行计算限制的异步操作的时候，如果在后台线程中...</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                2015 - 08 - 10
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  3 分钟阅读
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/wpf">wpf</a>
+                
+              </div>
+            </div>
+            <span >
+              <div class="cinc-postPanel" user-id="585e945861ff4b006cdc3151" data-key="/posts/WPF多线程UI更新——两种方法" data-title="WPF多线程UI更新——两种方法" data-url="http://blog.kelvv.com//posts/WPF多线程UI更新——两种方法" isReadOnly=false></div>
+              <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/postPanel.min.js" charset="UTF-8"></script>
+            </span>
+          </header>
+
+          <div class="article-content">
+            <h3 id="前言">前言</h3>
+<p>　
+　　在WPF中，在使用多线程在后台进行计算限制的异步操作的时候，如果在后台线程中对UI进行了修改，则会出现一个错误：（调用线程无法访问此对象，因为另一个线程拥有该对象。）这是很常见的一个错误，一不小心就会有这个现象。在WPF中，如果不是用多线程的话，例如单线程应用程序，就是说代码一路过去都在GUI线程运行，可以随意更新任何东西，包括UI对象。但是使用多线程来更新UI就可能会出现以上所说问题，怎么解决？本文章提供两个方法：Dispatcher（大部分人使用）,TaskScheduler（任务调度器）。</p>
+
+<h3 id="问题再现">问题再现</h3>
+<p>　
+  可能有的WPF新手不懂这是什么情况，先来个问题的再现，再使用本文章的两个方法进行解决。</p>
+
+<p>为了演示方便，我使用了最简单的布局，一个开始按钮，三个TextBlock。按一下开始按钮，开一个后台线程随机得到一个数字，并且更新第一个TextBlock。再开另外一个后台线程得到另外一个数字，更新第二个TextBlock。第三个TextBlock处理同理。</p>
+
+<p>XAML代码：</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;Window</span> <span class="na">x:Class=</span><span class="s">"UpdateUIDemo.MainWindow"</span>
+        <span class="na">xmlns=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span>
+        <span class="na">xmlns:x=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml"</span>
+        <span class="na">Title=</span><span class="s">"MainWindow"</span> <span class="na">Height=</span><span class="s">"130"</span> <span class="na">Width=</span><span class="s">"363"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;Canvas&gt;</span>
+        <span class="nt">&lt;TextBlock</span> <span class="na">Width=</span><span class="s">"40"</span> <span class="na">Canvas.Left=</span><span class="s">"38"</span> <span class="na">Canvas.Top=</span><span class="s">"27"</span> <span class="na">Height=</span><span class="s">"29"</span> <span class="na">x:Name=</span><span class="s">"first"</span> <span class="na">Background=</span><span class="s">"Black"</span> <span class="na">Foreground=</span><span class="s">"White"</span><span class="nt">&gt;&lt;/TextBlock&gt;</span>
+        <span class="nt">&lt;TextBlock</span> <span class="na">Width=</span><span class="s">"40"</span> <span class="na">Canvas.Left=</span><span class="s">"128"</span> <span class="na">Canvas.Top=</span><span class="s">"27"</span> <span class="na">Height=</span><span class="s">"29"</span> <span class="na">x:Name=</span><span class="s">"second"</span> <span class="na">Background=</span><span class="s">"Black"</span> <span class="na">Foreground=</span><span class="s">"White"</span><span class="nt">&gt;&lt;/TextBlock&gt;</span>
+        <span class="nt">&lt;TextBlock</span> <span class="na">Width=</span><span class="s">"40"</span> <span class="na">Canvas.Left=</span><span class="s">"211"</span> <span class="na">Canvas.Top=</span><span class="s">"27"</span> <span class="na">Height=</span><span class="s">"29"</span> <span class="na">x:Name=</span><span class="s">"Three"</span> <span class="na">Background=</span><span class="s">"Black"</span> <span class="na">Foreground=</span><span class="s">"White"</span><span class="nt">&gt;&lt;/TextBlock&gt;</span>
+        <span class="nt">&lt;Button</span> <span class="na">Height=</span><span class="s">"21"</span> <span class="na">Width=</span><span class="s">"50"</span> <span class="na">Canvas.Left=</span><span class="s">"271"</span> <span class="na">Canvas.Top=</span><span class="s">"58"</span> <span class="na">Content=</span><span class="s">"开始"</span> <span class="na">Click=</span><span class="s">"Button_Click"</span><span class="nt">&gt;&lt;/Button&gt;</span>
+    <span class="nt">&lt;/Canvas&gt;</span>
+<span class="nt">&lt;/Window&gt;</span></code></pre></figure>
+
+<p>后台代码：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">partial</span> <span class="kd">class</span> <span class="nc">MainWindow</span> <span class="o">:</span> <span class="n">Window</span>
+    <span class="o">{</span>
+        <span class="kd">public</span> <span class="nf">MainWindow</span><span class="o">()</span>
+        <span class="o">{</span>
+            <span class="n">InitializeComponent</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">Button_Click</span><span class="o">(</span><span class="n">object</span> <span class="n">sender</span><span class="o">,</span> <span class="n">RoutedEventArgs</span> <span class="n">e</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">Task</span><span class="o">.</span><span class="na">Factory</span><span class="o">.</span><span class="na">StartNew</span><span class="o">(</span><span class="n">Work</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">Work</span><span class="o">()</span>
+        <span class="o">{</span>
+            <span class="n">Task</span> <span class="n">task</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Task</span><span class="o">((</span><span class="n">tb</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">Begin</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">first</span><span class="o">),</span> <span class="k">this</span><span class="o">.</span><span class="na">first</span><span class="o">);</span>
+            <span class="n">Task</span> <span class="n">task2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Task</span><span class="o">((</span><span class="n">tb</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">Begin</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">second</span><span class="o">),</span> <span class="k">this</span><span class="o">.</span><span class="na">first</span><span class="o">);</span>
+            <span class="n">Task</span> <span class="n">task3</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Task</span><span class="o">((</span><span class="n">tb</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">Begin</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">Three</span><span class="o">),</span> <span class="k">this</span><span class="o">.</span><span class="na">first</span><span class="o">);</span>
+            <span class="n">task</span><span class="o">.</span><span class="na">Start</span><span class="o">();</span>
+            <span class="n">task</span><span class="o">.</span><span class="na">Wait</span><span class="o">();</span>
+            <span class="n">task2</span><span class="o">.</span><span class="na">Start</span><span class="o">();</span>
+            <span class="n">task2</span><span class="o">.</span><span class="na">Wait</span><span class="o">();</span>
+            <span class="n">task3</span><span class="o">.</span><span class="na">Start</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">Begin</span><span class="o">(</span><span class="n">TextBlock</span> <span class="n">tb</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">100000000</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">)</span>
+            <span class="o">{</span>
+                <span class="n">i</span><span class="o">--;</span>
+            <span class="o">}</span>
+            <span class="n">Random</span> <span class="n">random</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">Num</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="na">Next</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">100</span><span class="o">).</span><span class="na">ToString</span><span class="o">();</span>
+            <span class="n">tb</span><span class="o">.</span><span class="na">Text</span> <span class="o">=</span> <span class="n">Num</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span></code></pre></figure>
+
+<p>　　运行一下，在点击开始按钮的时候，得到了一个错误信息：</p>
+
+<p>　　果然不出所料，Begin函数是在后台线程执行的，tb这个TextBlock是前台UI线程的对象，所以无法在后台线程改变UI线程拥有的对象，很多有点经验的WPF程序员就会使用下面我要说的Dispatcher了！</p>
+
+<h3 id="问题解决">问题解决</h3>
+
+<p>　　* 方法一：Dispatcher</p>
+
+<p>　　　　1. 把UI更新的代码放到一个函数中：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    private void UpdateTb(TextBlock tb, string text)
+    {
+        tb.Text = text;
+    } 　　　　2. 使用Dispatcher,大家看修改后的Begin函数(红色内容)：
+
+
+    private void Begin(TextBlock tb)
+    {
+        int i=100000000;
+        while (i&gt;0)
+        {
+            i--;
+        }
+        Random random = new Random();
+        String Num = random.Next(0, 100).ToString();
+        Action&lt;TextBlock, String&gt; updateAction = new Action&lt;TextBlock, string&gt;(UpdateTb);
+        tb.Dispatcher.BeginInvoke(updateAction,tb,Num);
+    }
+</code></pre>
+</div>
+
+<p>　　再运行一次程序，可以看到能正常显示了，并且不会出现假死现象。</p>
+
+<p>　　* 方法二：任务调度器(TaskScheduler)</p>
+
+<p>　　　　有很多任务调度器，在CLR Var C#中就提出了线程池任务调度器，I/O任务调度器，任务限时调度器等，调度器的职责就是负责任务的调度，调节任务执行。同步上下文任务调度器就是该方法二所使用的调度器，其作用是将所有任务都调度给应用程序的GUI线程。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">partial</span> <span class="kd">class</span> <span class="nc">MainWindow</span> <span class="o">:</span> <span class="n">Window</span>
+    <span class="o">{</span>
+        <span class="kd">public</span> <span class="nf">MainWindow</span><span class="o">()</span>
+        <span class="o">{</span>
+            <span class="n">InitializeComponent</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="kd">private</span> <span class="n">readonly</span> <span class="n">TaskScheduler</span> <span class="n">_syncContextTaskScheduler</span> <span class="o">=</span> <span class="n">TaskScheduler</span><span class="o">.</span><span class="na">FromCurrentSynchronizationContext</span><span class="o">();</span>
+
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">Button_Click</span><span class="o">(</span><span class="n">object</span> <span class="n">sender</span><span class="o">,</span> <span class="n">RoutedEventArgs</span> <span class="n">e</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">Task</span><span class="o">.</span><span class="na">Factory</span><span class="o">.</span><span class="na">StartNew</span><span class="o">(</span><span class="n">SchedulerWork</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">SchedulerWork</span><span class="o">()</span>
+        <span class="o">{</span>
+            <span class="n">Task</span><span class="o">.</span><span class="na">Factory</span><span class="o">.</span><span class="na">StartNew</span><span class="o">(</span><span class="n">Begin</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">first</span><span class="o">).</span><span class="na">Wait</span><span class="o">();</span>
+            <span class="n">Task</span><span class="o">.</span><span class="na">Factory</span><span class="o">.</span><span class="na">StartNew</span><span class="o">(</span><span class="n">Begin</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">second</span><span class="o">).</span><span class="na">Wait</span><span class="o">();</span>
+            <span class="n">Task</span><span class="o">.</span><span class="na">Factory</span><span class="o">.</span><span class="na">StartNew</span><span class="o">(</span><span class="n">Begin</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">Three</span><span class="o">).</span><span class="na">Wait</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">Begin</span><span class="o">(</span><span class="n">object</span> <span class="n">obj</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">TextBlock</span> <span class="n">tb</span> <span class="o">=</span> <span class="n">obj</span> <span class="n">as</span> <span class="n">TextBlock</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">100000000</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">)</span>
+            <span class="o">{</span>
+                <span class="n">i</span><span class="o">--;</span>
+            <span class="o">}</span>
+            <span class="n">Random</span> <span class="n">random</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">Num</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="na">Next</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">100</span><span class="o">).</span><span class="na">ToString</span><span class="o">();</span>
+            <span class="n">Task</span><span class="o">.</span><span class="na">Factory</span><span class="o">.</span><span class="na">StartNew</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">UpdateTb</span><span class="o">(</span><span class="n">tb</span><span class="o">,</span> <span class="n">Num</span><span class="o">),</span>
+                    <span class="k">new</span> <span class="nf">CancellationTokenSource</span><span class="o">().</span><span class="na">Token</span><span class="o">,</span> <span class="n">TaskCreationOptions</span><span class="o">.</span><span class="na">None</span><span class="o">,</span> <span class="n">_syncContextTaskScheduler</span><span class="o">).</span><span class="na">Wait</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">UpdateTb</span><span class="o">(</span><span class="n">TextBlock</span> <span class="n">tb</span><span class="o">,</span> <span class="n">string</span> <span class="n">text</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">tb</span><span class="o">.</span><span class="na">Text</span> <span class="o">=</span> <span class="n">text</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span></code></pre></figure>
+
+<p>　　　结果展示：</p>
+
+<p><img src="http://upload-images.jianshu.io/upload_images/1952818-73de77d6b73f34a0.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" /></p>
+
+<h3 id="总结">总结</h3>
+<p>　
+　　任务调度器还有很多种，按照自己喜欢的方法来实现后台多线程更新UI。还有任务调度器也可以应用到Winform中。下面提供示例Demo下载。</p>
+
+<p><a href="http://files.cnblogs.com/Jarvin/%E5%90%8E%E5%8F%B0%E7%BA%BF%E7%A8%8B%E6%9B%B4%E6%96%B0UI.rar">完整Demo下载</a></p>
+
+          </div>
+
+          <div class="ds-share" data-thread-key="/posts/WPF多线程UI更新——两种方法" data-title="WPF多线程UI更新——两种方法" data-images="" data-content="WPF多线程UI更新——两种方法" data-url="http://blog.kelvv.com//posts/WPF多线程UI更新——两种方法">
+              <div class="ds-share-inline">
+                <ul  class="ds-share-icons-16">
+                  
+                  <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+                  <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                  <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+                  <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+                  <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                  
+                </ul>
+                <div class="ds-share-icons-more">
+                </div>
+              </div>
+          </div>
+          <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="/posts/WPF多线程UI更新——两种方法" data-title="WPF多线程UI更新——两种方法" data-url="http://blog.kelvv.com//posts/WPF多线程UI更新——两种方法"></div>
+          <!-- 多说评论框 end -->
+          <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+          <script type="text/javascript">
+          var duoshuoQuery = {short_name:"kelvv"};
+            (function() {
+              var ds = document.createElement('script');
+              ds.type = 'text/javascript';ds.async = true;
+              ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+              ds.charset = 'UTF-8';
+              (document.getElementsByTagName('head')[0] 
+              || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+            </script>
+          <!-- 多说公共JS代码 end -->
+        </article>
+        <footer class="footer reveal">
+  
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+
+
+
+
+</body>
+</html>

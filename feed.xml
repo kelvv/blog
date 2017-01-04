@@ -1,20 +1,90 @@
----
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>{{ site.name | xml_escape }}</title>
-    <description>{% if site.description %}{{ site.description | xml_escape }}{% endif %}</description>
-    <link>{{ site.url }}</link>
-    <atom:link href="{{ page.path | absolute_url }}" rel="self" type="application/rss+xml" />
-    {% for post in site.posts limit:10 %}
+    <title>阿文的技术小岛</title>
+    <description></description>
+    <link>http://blog.kelvv.com/</link>
+    <atom:link href="http://blog.kelvv.com//feed.xml" rel="self" type="application/rss+xml" />
+    
       <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <description>{{ post.description | xml_escape }}</description>
-        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
-        <link>{{ post.url | absolute_url }}</link>
-        <guid isPermaLink="true">{{ post.url | absolute_url }}</guid>
+        <title>你有静态博客？我帮你解决阅读量问题</title>
+        <description>现在有很多地方可以写博客，例如MSDN、博客园、简书、知乎等等，这些动态博客一般都会提供编辑器，发布文章后也会有比较完善的功能（点赞、评论、阅读量等）...</description>
+        <pubDate>Tue, 03 Jan 2017 00:00:00 +0800</pubDate>
+        <link>http://blog.kelvv.com//posts/%E4%BD%A0%E6%9C%89%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2-%E6%88%91%E5%B8%AE%E4%BD%A0%E8%A7%A3%E5%86%B3%E9%98%85%E8%AF%BB%E9%87%8F%E9%97%AE%E9%A2%98</link>
+        <guid isPermaLink="true">http://blog.kelvv.com//posts/%E4%BD%A0%E6%9C%89%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2-%E6%88%91%E5%B8%AE%E4%BD%A0%E8%A7%A3%E5%86%B3%E9%98%85%E8%AF%BB%E9%87%8F%E9%97%AE%E9%A2%98</guid>
       </item>
-    {% endfor %}
+    
+      <item>
+        <title>Geek必备 - Markdown</title>
+        <description>简约的编写风格，让你告别格式问题</description>
+        <pubDate>Thu, 15 Dec 2016 00:00:00 +0800</pubDate>
+        <link>http://blog.kelvv.com//posts/geek%E5%BF%85%E5%A4%87-markdown</link>
+        <guid isPermaLink="true">http://blog.kelvv.com//posts/geek%E5%BF%85%E5%A4%87-markdown</guid>
+      </item>
+    
+      <item>
+        <title>Geek必备 - 正则表达式</title>
+        <description>掌握正则表达式，让你的生活更美好</description>
+        <pubDate>Sat, 10 Dec 2016 00:00:00 +0800</pubDate>
+        <link>http://blog.kelvv.com//posts/geek%E5%BF%85%E5%A4%87-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F</link>
+        <guid isPermaLink="true">http://blog.kelvv.com//posts/geek%E5%BF%85%E5%A4%87-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F</guid>
+      </item>
+    
+      <item>
+        <title>一个通用正则库</title>
+        <description>正则表达式可以用于匹配和替换，该项目搜集开发者日常开发任务需要用到的一些匹配、验证的需求。</description>
+        <pubDate>Mon, 28 Nov 2016 00:00:00 +0800</pubDate>
+        <link>http://blog.kelvv.com//posts/%E4%B8%80%E4%B8%AA%E9%80%9A%E7%94%A8%E6%AD%A3%E5%88%99%E5%BA%93</link>
+        <guid isPermaLink="true">http://blog.kelvv.com//posts/%E4%B8%80%E4%B8%AA%E9%80%9A%E7%94%A8%E6%AD%A3%E5%88%99%E5%BA%93</guid>
+      </item>
+    
+      <item>
+        <title>docker中使用nginx容器代理其他容器</title>
+        <description>相信nginx大家也不陌生，大部分情况下都是在服务器中直接安装Nginx代理，但是如今Docker当道，如何结合Do...</description>
+        <pubDate>Thu, 20 Oct 2016 00:00:00 +0800</pubDate>
+        <link>http://blog.kelvv.com//posts/docker%E4%B8%AD%E4%BD%BF%E7%94%A8nginx%E5%AE%B9%E5%99%A8%E4%BB%A3%E7%90%86%E5%85%B6%E4%BB%96%E5%AE%B9%E5%99%A8</link>
+        <guid isPermaLink="true">http://blog.kelvv.com//posts/docker%E4%B8%AD%E4%BD%BF%E7%94%A8nginx%E5%AE%B9%E5%99%A8%E4%BB%A3%E7%90%86%E5%85%B6%E4%BB%96%E5%AE%B9%E5%99%A8</guid>
+      </item>
+    
+      <item>
+        <title>忘记ip地址，用ssh别名登陆</title>
+        <description>ssh是常用的服务器连接工具，通过别名登陆，然你方便快速连接各个服务器</description>
+        <pubDate>Mon, 10 Oct 2016 00:00:00 +0800</pubDate>
+        <link>http://blog.kelvv.com//posts/%E5%BF%98%E8%AE%B0ip%E5%9C%B0%E5%9D%80-%E7%94%A8ssh%E5%88%AB%E5%90%8D%E7%99%BB%E9%99%86</link>
+        <guid isPermaLink="true">http://blog.kelvv.com//posts/%E5%BF%98%E8%AE%B0ip%E5%9C%B0%E5%9D%80-%E7%94%A8ssh%E5%88%AB%E5%90%8D%E7%99%BB%E9%99%86</guid>
+      </item>
+    
+      <item>
+        <title>使用docker-compose来打包开发环境</title>
+        <description>开发环境涉及到数据库、缓存数据库、管理工具等的应用，应该把它们打包好，一键安装，自带重启</description>
+        <pubDate>Tue, 20 Sep 2016 00:00:00 +0800</pubDate>
+        <link>http://blog.kelvv.com//posts/%E7%94%A8docker-compose%E6%9D%A5%E6%89%93%E5%8C%85%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83</link>
+        <guid isPermaLink="true">http://blog.kelvv.com//posts/%E7%94%A8docker-compose%E6%9D%A5%E6%89%93%E5%8C%85%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83</guid>
+      </item>
+    
+      <item>
+        <title>如何一键部署项目、代码自动更新</title>
+        <description>不管你代码部署到哪里，只要是git管理的，就可以通过这篇文章学习如何自动部署代码</description>
+        <pubDate>Sun, 18 Sep 2016 00:00:00 +0800</pubDate>
+        <link>http://blog.kelvv.com//posts/%E5%A6%82%E4%BD%95%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE-%E4%BB%A3%E7%A0%81%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0</link>
+        <guid isPermaLink="true">http://blog.kelvv.com//posts/%E5%A6%82%E4%BD%95%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE-%E4%BB%A3%E7%A0%81%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0</guid>
+      </item>
+    
+      <item>
+        <title>利用Mongodb做地理空间查询</title>
+        <description>在移动开发中，经常会用到定位的功能，例如美团、饿了么、猫眼电影等的...</description>
+        <pubDate>Thu, 01 Sep 2016 00:00:00 +0800</pubDate>
+        <link>http://blog.kelvv.com//posts/%E5%88%A9%E7%94%A8mongodb%E5%81%9A%E5%9C%B0%E7%90%86%E7%A9%BA%E9%97%B4%E6%9F%A5%E8%AF%A2</link>
+        <guid isPermaLink="true">http://blog.kelvv.com//posts/%E5%88%A9%E7%94%A8mongodb%E5%81%9A%E5%9C%B0%E7%90%86%E7%A9%BA%E9%97%B4%E6%9F%A5%E8%AF%A2</guid>
+      </item>
+    
+      <item>
+        <title>Node服务端极速搭建 －－ nvmhome</title>
+        <description>nodejs中，使用docker搭建服务</description>
+        <pubDate>Wed, 10 Aug 2016 00:00:00 +0800</pubDate>
+        <link>http://blog.kelvv.com//posts/node%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%9E%81%E9%80%9F%E6%90%AD%E5%BB%BA-nvmhome</link>
+        <guid isPermaLink="true">http://blog.kelvv.com//posts/node%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%9E%81%E9%80%9F%E6%90%AD%E5%BB%BA-nvmhome</guid>
+      </item>
+    
   </channel>
 </rss>

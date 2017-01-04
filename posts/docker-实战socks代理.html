@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>阿文的技术小岛 | docker－实战SOCKS代理</title>
+  <meta name="description" content="实现自己的socket代理，做梯子">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="docker－实战SOCKS代理">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.kelvv.com//posts/docker-%E5%AE%9E%E6%88%98socks%E4%BB%A3%E7%90%86">
+  <meta property="og:description" content="实现自己的socket代理，做梯子">
+  <meta property="og:site_name" content="阿文的技术小岛">
+  <meta property="og:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://blog.kelvv.com//posts/docker-%E5%AE%9E%E6%88%98socks%E4%BB%A3%E7%90%86">
+  <meta name="twitter:title" content="docker－实战SOCKS代理">
+  <meta name="twitter:description" content="实现自己的socket代理，做梯子">
+  <meta name="twitter:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="http://blog.kelvv.com//feed.xml" type="application/rss+xml" rel="alternate" title="阿文的技术小岛 Last 10 blog posts" />
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="/" class="header-logo" title="阿文的技术小岛">阿文的技术小岛</a>
+  <div class="cinc-totalPanel" user-id="585e945861ff4b006cdc3151"></div>
+  <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/totalPanel.min.js" charset="UTF-8"></script>
+  <ul class="header-links">
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/kelvv" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:kelvv@outlook.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>docker－实战SOCKS代理</h1>
+            <p>实现自己的socket代理，做梯子</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                2016 - 08 - 01
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  1 分钟阅读
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/docker">docker</a>
+                
+              </div>
+            </div>
+            <span >
+              <div class="cinc-postPanel" user-id="585e945861ff4b006cdc3151" data-key="/posts/docker－实战SOCKS代理" data-title="docker－实战SOCKS代理" data-url="http://blog.kelvv.com//posts/docker－实战SOCKS代理" isReadOnly=false></div>
+              <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/postPanel.min.js" charset="UTF-8"></script>
+            </span>
+          </header>
+
+          <div class="article-content">
+            <blockquote>
+  <p>　　Docker 是一个开源的应用容器引擎，让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 <a href="http://baike.baidu.com/view/1634.htm">Linux</a> 机器上，也可以实现<a href="http://baike.baidu.com/view/729629.htm">虚拟化</a>。容器是完全使用<a href="http://baike.baidu.com/subview/720343/13998082.htm">沙箱</a>机制，相互之间不会有任何接口（类似 iPhone 的 app）。</p>
+</blockquote>
+
+<h2 id="docker是啥">Docker是啥？</h2>
+<h3 id="简介">简介　</h3>
+<p>　　Docker自2013年以来非常火，各公司、个人陆陆续续地玩起了Docker,下面简单介绍下Docker的组成，并且会以一个科学上网的实例来实操。
+　　</p>
+<h3 id="拆解docker">拆解Docker</h3>
+<ol>
+  <li>Dockerfile: 相当于脚本文件，可让docker执行的脚本文件，可用它来生成一个镜像Images，我们可以把Images里面应该有些什么应用、构建的时候执行什么脚本、运行的时候又进行什么动作，都可以通过Dockerfile进行描述。
+　　</li>
+  <li>Images：相信大家应该装过系统吧？装系统之前需要先准备好你想要的系统的镜像文件iso，在Docker中的Images和iso很想，也一个镜像，它的用处就是能被用于安装、保存、传递。我们创建的镜像Images可以发布到docker hub（理解为镜像市场）,然后全世界都可以使用你的镜像了。
+　　</li>
+  <li>Contianer:有了镜像Images，每一次安装Images，就会产生相应一个Contianer，每一个Contianer其实就是一间小房子，里面运行一个系统(linux)，系统里面默认运行着各个应用，但是神奇的是，这个小房子相对独立，当它不想和外界交流的时候，绝对是隔离的。当然也有方式提供接口给外界访问（有窗口嘛）。</li>
+</ol>
+
+<h3 id="实战">实战</h3>
+<p>　　每个程序员都会经历折腾怎么去google查资料，去twitter等等，现在主流的就是VPN、ss等，那么今天我们创建一个ss的镜像，我的主要目的是为了通过例子去让人更容易理解Docker的运行原理，该例子是一个小例子，用于入门，谢谢。</p>
+
+<p><img src="http://upload-images.jianshu.io/upload_images/1952818-2af4f0b6cf30fbca.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="思维导图" /></p>
+
+<h3 id="开始">开始</h3>
+<ol>
+  <li>准备一个香港的或者海外的服务器(Ubuntu为例)，用于测试也可以在本地虚拟机内运行。</li>
+  <li>使用ssh连接到服务器，默认在用户根目录：～
+    <div class="highlighter-rouge"><pre class="highlight"><code> //git环境准备
+ apt-get install git
+ git //查看是否安装成功
+ git clone https://github.com/Jarvin-Guan/shadowsocks-docker.git //拉取代码
+
+ //安装Docker (Ubuntu)
+ apt-get install docker.io
+ service docker.io status
+ service docker.io start
+ ln -sf /usr/bin/docker.io /usr/local/bin/docker
+
+ //创建Images
+ docker build -t username/imagename .
+
+ //上传images
+ //先在docker hub中注册一个账号
+ docker login --username=用户名 --email=邮箱 //登录docker hub
+ docker push username/imagename //推送镜像到docker hub
+
+ //安装ss
+ //你只需要修改端口(7878),密码(docker)。
+ //下载shadowsock客户端，使用：
+ //账号：你的服务器地址。
+ //端口：你修改后的端口号。
+ //密码：你修改后的密码。
+ docker run -it -p 7878:431 -e "password=docker" -d username/imagename
+ //这里使用-e设置容器内的环境变量，便于容器内的某些脚本使用该变量。
+
+ //ok,现在你可以下载ss客户端，然后使用你的服务器ip地址，端口号，密码来科学上网了
+</code></pre>
+    </div>
+  </li>
+  <li>代码讲解
+  大家可以浏览<a href="https://github.com/Jarvin-Guan/shadowsocks-docker">代码</a>,里面有两个文件</li>
+</ol>
+
+<p>Dockerfile</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">FROM</span> <span class="nx">ubuntu</span><span class="err">:</span><span class="mf">14.04</span>  <span class="c1">//使用ubuntu版本14.04为基础，也就是说该镜像创建出来的容器时运行在ubuntu上的</span>
+<span class="nx">RUN</span> <span class="nx">apt</span><span class="o">-</span><span class="nx">get</span> <span class="nx">update</span> <span class="c1">//更新apt-get</span>
+<span class="nx">RUN</span> <span class="nx">apt</span><span class="o">-</span><span class="nx">get</span> <span class="nx">install</span> <span class="o">-</span><span class="nx">y</span> <span class="nx">python</span><span class="o">-</span><span class="nx">pip</span> <span class="c1">//安装python-pip，这里的-y意思是遇到询问的一律选yes</span>
+<span class="nx">RUN</span> <span class="nx">pip</span> <span class="nx">install</span> <span class="nx">shadowsocks</span>  <span class="c1">//使用pip安装ss</span>
+<span class="nx">COPY</span> <span class="p">.</span><span class="o">/</span><span class="nx">ServerStart</span><span class="p">.</span><span class="nx">sh</span> <span class="p">.</span><span class="o">/</span><span class="nx">ServerStart</span><span class="p">.</span><span class="nx">sh</span> <span class="c1">//把sh脚本文件拷贝到容器容器里面，这种方式便于扩展。</span>
+<span class="nx">ENTRYPOINT</span> <span class="p">[</span><span class="s2">"/bin/sh"</span><span class="p">,</span><span class="s2">"./ServerStart.sh"</span><span class="p">]</span> <span class="c1">//运行sh文件，所以，所有的动作都是在sh中。</span></code></pre></figure>
+
+<p>ServerStart.sh</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"> <span class="c1">//#!/bin/sh</span>
+<span class="nx">ssserver</span> <span class="o">-</span><span class="nx">p</span> <span class="mi">431</span> <span class="o">-</span><span class="nx">k</span> <span class="nx">$</span><span class="p">{</span><span class="nx">password</span><span class="p">}</span> <span class="o">-</span><span class="nx">m</span> <span class="nx">aes</span><span class="o">-</span><span class="mi">256</span><span class="o">-</span><span class="nx">cfb</span> <span class="c1">//这里使用#{password}，这是引用环境变量。</span>
+<span class="c1">//具体在哪里设置环境变量呢？当然是用户启动镜像的时候。</span></code></pre></figure>
+
+<h2 id="总结">总结</h2>
+<ol>
+  <li>docker build 用于使用Dockerfile创建出镜像。</li>
+  <li>docker run 用于使用镜像生成一个镜像对应的Container。</li>
+  <li>环境变量在docker run 的时候传入-e参数传入，使用环境变量的时候，因为大多数都是sh文件，所以在sh文件使用${变量名}来进行使用。</li>
+</ol>
+
+          </div>
+
+          <div class="ds-share" data-thread-key="/posts/docker－实战SOCKS代理" data-title="docker－实战SOCKS代理" data-images="" data-content="docker－实战SOCKS代理" data-url="http://blog.kelvv.com//posts/docker－实战SOCKS代理">
+              <div class="ds-share-inline">
+                <ul  class="ds-share-icons-16">
+                  
+                  <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+                  <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                  <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+                  <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+                  <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                  
+                </ul>
+                <div class="ds-share-icons-more">
+                </div>
+              </div>
+          </div>
+          <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="/posts/docker－实战SOCKS代理" data-title="docker－实战SOCKS代理" data-url="http://blog.kelvv.com//posts/docker－实战SOCKS代理"></div>
+          <!-- 多说评论框 end -->
+          <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+          <script type="text/javascript">
+          var duoshuoQuery = {short_name:"kelvv"};
+            (function() {
+              var ds = document.createElement('script');
+              ds.type = 'text/javascript';ds.async = true;
+              ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+              ds.charset = 'UTF-8';
+              (document.getElementsByTagName('head')[0] 
+              || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+            </script>
+          <!-- 多说公共JS代码 end -->
+        </article>
+        <footer class="footer reveal">
+  
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+
+
+
+
+</body>
+</html>

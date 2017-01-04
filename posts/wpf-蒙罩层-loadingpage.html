@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>阿文的技术小岛 | WPF 蒙罩层 LoadingPage</title>
+  <meta name="description" content="无论是在PC客户端，移动端，网站，在遇到长时间处理的时候都会需要用到蒙罩层，让用户有更好的体现。今天上网逛了一下各位前辈网友...">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="WPF 蒙罩层 LoadingPage">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.kelvv.com//posts/wpf-%E8%92%99%E7%BD%A9%E5%B1%82-loadingpage">
+  <meta property="og:description" content="无论是在PC客户端，移动端，网站，在遇到长时间处理的时候都会需要用到蒙罩层，让用户有更好的体现。今天上网逛了一下各位前辈网友...">
+  <meta property="og:site_name" content="阿文的技术小岛">
+  <meta property="og:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://blog.kelvv.com//posts/wpf-%E8%92%99%E7%BD%A9%E5%B1%82-loadingpage">
+  <meta name="twitter:title" content="WPF 蒙罩层 LoadingPage">
+  <meta name="twitter:description" content="无论是在PC客户端，移动端，网站，在遇到长时间处理的时候都会需要用到蒙罩层，让用户有更好的体现。今天上网逛了一下各位前辈网友...">
+  <meta name="twitter:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="http://blog.kelvv.com//feed.xml" type="application/rss+xml" rel="alternate" title="阿文的技术小岛 Last 10 blog posts" />
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="/" class="header-logo" title="阿文的技术小岛">阿文的技术小岛</a>
+  <div class="cinc-totalPanel" user-id="585e945861ff4b006cdc3151"></div>
+  <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/totalPanel.min.js" charset="UTF-8"></script>
+  <ul class="header-links">
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/kelvv" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:kelvv@outlook.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>WPF 蒙罩层 LoadingPage</h1>
+            <p>无论是在PC客户端，移动端，网站，在遇到长时间处理的时候都会需要用到蒙罩层，让用户有更好的体现。今天上网逛了一下各位前辈网友...</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                2015 - 05 - 10
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  2 分钟阅读
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/wpf">wpf</a>
+                
+              </div>
+            </div>
+            <span >
+              <div class="cinc-postPanel" user-id="585e945861ff4b006cdc3151" data-key="/posts/WPF 蒙罩层 LoadingPage" data-title="WPF 蒙罩层 LoadingPage" data-url="http://blog.kelvv.com//posts/WPF 蒙罩层 LoadingPage" isReadOnly=false></div>
+              <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/postPanel.min.js" charset="UTF-8"></script>
+            </span>
+          </header>
+
+          <div class="article-content">
+            <h3 id="前言">前言</h3>
+<p>　　无论是在PC客户端，移动端，网站，在遇到长时间处理的时候都会需要用到蒙罩层，让用户有更好的体现。今天上网逛了一下各位前辈网友的蒙罩层的实现方式，觉得有很多都搞复杂了（利用前台代码+后台代码+数学计算），无疑增加了维护的难度。然而，本人参考了各位前辈的实现以后，自己实现了一个可重用LoadingPage控件，欢迎各位下载使用。</p>
+
+<h3 id="需求">需求</h3>
+<p>需求先行是必须的，我的目标是做成怎样一个效果呢？</p>
+
+<ol>
+  <li>
+    <p>是一个控件，可以在.NET各环境中得以重用。</p>
+  </li>
+  <li>
+    <p>可配置，例如颜色，大小，提醒字符串等等的属性，用户可以自定义，以满足用户所在情况的需求。</p>
+  </li>
+  <li>
+    <p>大小比例自适应，不同大小的窗口载体，能自动改变自身大小比例。</p>
+  </li>
+  <li>
+    <p>效果全部xaml实现，全部集中于xaml可控制难度不会大，维护起来方便，用户拷贝xaml也方便。</p>
+  </li>
+</ol>
+
+<h3 id="解决方法">解决方法</h3>
+<p>　</p>
+<ol>
+  <li>
+    <p>新建WPF用户控件库进行开发。</p>
+  </li>
+  <li>
+    <p>使用依赖项属性，然后前台xaml使用属性绑定来实现。</p>
+  </li>
+  <li>
+    <p>使用ViewBox控件（该控件能够自动缩放内容）。</p>
+  </li>
+  <li>
+    <p>在xaml中的写动画代码。</p>
+  </li>
+</ol>
+
+<h3 id="结果展示">结果展示</h3>
+<p>　　
+<img src="http://upload-images.jianshu.io/upload_images/1952818-9ac315efcd93a4b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" /></p>
+
+<h3 id="制作过程">制作过程</h3>
+<p>　</p>
+<ol>
+  <li>
+    <p>新建一个”WPF用户控件库”工程，新建一个WPF控件。（这步不解释）</p>
+  </li>
+  <li>为了实现蒙罩效果，我们把控件的背景弄成黑色背景，并且透明度为0.2。
+    <div class="highlighter-rouge"><pre class="highlight"><code>     &lt;UserControl.Background&gt;
+         &lt;SolidColorBrush Color="Black" Opacity="0.2" &gt;&lt;/SolidColorBrush&gt;
+     &lt;/UserControl.Background&gt;
+</code></pre>
+    </div>
+  </li>
+  <li>然后就是先利用Canvas作为背景，在其上画一个由小圆圈构成的大圈，使用控件Ellipse。
+    <div class="highlighter-rouge"><pre class="highlight"><code>     &lt;Canvas RenderTransformOrigin="0.5,0.5" 
+                 HorizontalAlignment="Center"  x:Name="loadCancas"
+                 VerticalAlignment="Center" Width="120"  
+                 Height="120" &gt;
+             &lt;Canvas.Resources&gt;
+                 &lt;Style TargetType="Ellipse"&gt;
+                     &lt;Setter Property="Width" Value="10" &gt;&lt;/Setter&gt;
+                     &lt;Setter Property="Height" Value="10" &gt;&lt;/Setter&gt;
+                     &lt;Setter Property="Canvas.Left" Value="30"&gt;&lt;/Setter&gt;
+                     &lt;Setter Property="Canvas.Top" Value="30"&gt;&lt;/Setter&gt;
+                     &lt;Setter Property="Stretch" Value="Fill"&gt;&lt;/Setter&gt;
+                     &lt;Setter Property="Fill" Value="Blue"&gt;&lt;/Setter&gt;
+                     &lt;Setter Property="RenderTransformOrigin" Value="3,3"&gt;&lt;/Setter&gt;
+                 &lt;/Style&gt;
+             &lt;/Canvas.Resources&gt;
+             &lt;Ellipse &gt;
+             &lt;/Ellipse&gt;
+             &lt;Ellipse Opacity="0.9"&gt;
+                 &lt;Ellipse.RenderTransform&gt;
+                     &lt;TransformGroup&gt;
+                         &lt;RotateTransform Angle="36"/&gt;
+                     &lt;/TransformGroup&gt;
+                 &lt;/Ellipse.RenderTransform&gt;
+             &lt;/Ellipse&gt;
+             &lt;Ellipse Opacity="0.8"&gt;
+                 &lt;Ellipse.RenderTransform&gt;
+                     &lt;TransformGroup&gt;
+                         &lt;RotateTransform Angle="72"/&gt;
+                     &lt;/TransformGroup&gt;
+                 &lt;/Ellipse.RenderTransform&gt;
+             &lt;/Ellipse&gt;
+             &lt;Ellipse Opacity="0.7"&gt;
+                 &lt;Ellipse.RenderTransform&gt;
+                     &lt;TransformGroup&gt;
+                         &lt;RotateTransform Angle="108"/&gt;
+                     &lt;/TransformGroup&gt;
+                 &lt;/Ellipse.RenderTransform&gt;
+             &lt;/Ellipse&gt;
+             &lt;Ellipse Opacity="0.6"&gt;
+                 &lt;Ellipse.RenderTransform&gt;
+                     &lt;TransformGroup&gt;
+                         &lt;RotateTransform Angle="144"/&gt;
+                     &lt;/TransformGroup&gt;
+                 &lt;/Ellipse.RenderTransform&gt;
+             &lt;/Ellipse&gt;
+             &lt;Ellipse Opacity="0.5"&gt;
+                 &lt;Ellipse.RenderTransform&gt;
+                     &lt;TransformGroup&gt;
+                         &lt;RotateTransform Angle="180"/&gt;
+                     &lt;/TransformGroup&gt;
+                 &lt;/Ellipse.RenderTransform&gt;
+             &lt;/Ellipse&gt;
+             &lt;Ellipse Opacity="0.4"&gt;
+                 &lt;Ellipse.RenderTransform&gt;
+                     &lt;TransformGroup&gt;
+                         &lt;RotateTransform Angle="216"/&gt;
+                     &lt;/TransformGroup&gt;
+                 &lt;/Ellipse.RenderTransform&gt;
+             &lt;/Ellipse&gt;
+             &lt;Ellipse Opacity="0.3"&gt;
+                 &lt;Ellipse.RenderTransform&gt;
+                     &lt;TransformGroup&gt;
+                         &lt;RotateTransform Angle="252"/&gt;
+                     &lt;/TransformGroup&gt;
+                 &lt;/Ellipse.RenderTransform&gt;
+             &lt;/Ellipse&gt;
+             &lt;Ellipse Opacity="0.2"&gt;
+                 &lt;Ellipse.RenderTransform&gt;
+                     &lt;TransformGroup&gt;
+                         &lt;RotateTransform Angle="288"/&gt;
+                     &lt;/TransformGroup&gt;
+                 &lt;/Ellipse.RenderTransform&gt;
+             &lt;/Ellipse&gt;
+             &lt;Ellipse Opacity="0.1" &gt;
+                 &lt;Ellipse.RenderTransform&gt;
+                     &lt;TransformGroup&gt;
+                         &lt;RotateTransform Angle="324"/&gt;
+                     &lt;/TransformGroup&gt;
+                 &lt;/Ellipse.RenderTransform&gt;
+             &lt;/Ellipse&gt;
+             &lt;Canvas.RenderTransform&gt;
+                 &lt;TransformGroup&gt;
+                     &lt;RotateTransform x:Name="SpinnerRotate"  
+                      Angle="0" /&gt;
+                 &lt;/TransformGroup&gt;
+             &lt;/Canvas.RenderTransform&gt;
+         &lt;/Canvas&gt;
+     &lt;/Grid&gt;
+</code></pre>
+    </div>
+    <p>这样就形成了一个圈，然后为了实现目标3(内容能自动改变大小)，使用一个viewBox作为容器，包住这个Canvas。（不贴代码了）</p>
+  </li>
+  <li>旋转动画编写。因为我在Canvas画了一个圈，然而我只需无限旋转Canvas便可实现像小圆圈在动一样。下面看一下Canvas的触发器，在触发器中实现动画的编写。
+    <div class="highlighter-rouge"><pre class="highlight"><code>     &lt;Canvas.Triggers&gt;
+     　　&lt;EventTrigger RoutedEvent="Loaded"&gt;
+     　　　　&lt;BeginStoryboard Name="loadAnimation"&gt;
+     　　　　　　&lt;Storyboard&gt;
+     　　　　　　　　&lt;DoubleAnimation Storyboard.TargetName="loadCancas" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(RotateTransform.Angle)" From="360" To="0" RepeatBehavior="Forever" Duration="0:0:3"&gt;&lt;/DoubleAnimation&gt;
+               &lt;/Storyboard&gt;
+           &lt;/BeginStoryboard&gt;
+         &lt;/EventTrigger&gt;
+         &lt;EventTrigger RoutedEvent="Unloaded"&gt;
+     　　　　&lt;StopStoryboard BeginStoryboardName="loadAnimation"&gt;&lt;/StopStoryboard&gt;
+         &lt;/EventTrigger&gt;
+     &lt;/Canvas.Triggers&gt;
+</code></pre>
+    </div>
+  </li>
+  <li>属性可配置，使用依赖属性，并且在xaml中写绑定，下面先看后台代码中的依赖项属性的定义，然后前台绑定就补贴了，统一在附件中可以看到。
+    <div class="highlighter-rouge"><pre class="highlight"><code>     public partial class LoadingPage : UserControl
+     {
+         public LoadingPage()
+         {
+             InitializeComponent();
+         }
+
+         #region 加载圆圈的margin
+         [DescriptionAttribute("加载圆圈的margin"), CategoryAttribute("扩展"), DefaultValueAttribute(0)]
+         public string LoadCirclesMargin
+         {
+             get { return (string)GetValue(LoadCirclesMarginProperty); }
+             set { SetValue(LoadCirclesMarginProperty, value); }
+         }
+
+
+         public static readonly DependencyProperty LoadCirclesMarginProperty =
+             DependencyProperty.Register("LoadCirclesMargin", typeof(string), typeof(LoadingPage),
+             new FrameworkPropertyMetadata("50"));
+         #endregion
+
+         #region 加载中的提示
+         [DescriptionAttribute("加载中的提示"), CategoryAttribute("扩展"), DefaultValueAttribute(0)]
+         public string LoadingText
+         {
+             get { return (string)GetValue(LoadingTextProperty); }
+             set { SetValue(LoadingTextProperty, value); }
+         }
+
+
+         public static readonly DependencyProperty LoadingTextProperty =
+             DependencyProperty.Register("LoadingText", typeof(string), typeof(LoadingPage),
+             new FrameworkPropertyMetadata("加载中"));
+         #endregion
+
+         #region 加载中的提示的字体大小
+         [DescriptionAttribute("加载中的提示的字体大小"), CategoryAttribute("扩展"), DefaultValueAttribute(0)]
+         public int LoadingTextFontSize
+         {
+             get { return (int)GetValue(LoadingTextFontSizeProperty); }
+             set { SetValue(LoadingTextFontSizeProperty, value); }
+         }
+
+
+         public static readonly DependencyProperty LoadingTextFontSizeProperty =
+             DependencyProperty.Register("LoadingTextFontSize", typeof(int), typeof(LoadingPage),
+             new FrameworkPropertyMetadata(12));
+         #endregion
+
+         #region 圆圈的颜色
+         [DescriptionAttribute("圆圈的颜色"), CategoryAttribute("扩展"), DefaultValueAttribute(0)]
+         public Brush CirclesBrush
+         {
+             get { return (Brush)GetValue(CirclesBrushProperty); }
+             set { SetValue(CirclesBrushProperty, value); }
+         }
+
+
+         public static readonly DependencyProperty CirclesBrushProperty =
+             DependencyProperty.Register("CirclesBrush", typeof(Brush), typeof(LoadingPage),
+             new FrameworkPropertyMetadata(Brushes.Black));
+         #endregion
+
+         #region 加载中的提示的字体颜色
+         [DescriptionAttribute("加载中的提示的字体颜色"), CategoryAttribute("扩展"), DefaultValueAttribute(0)]
+         public Brush LoadingTextForeground
+         {
+             get { return (Brush)GetValue(LoadingTextForegroundProperty); }
+             set { SetValue(LoadingTextForegroundProperty, value); }
+         }
+
+
+         public static readonly DependencyProperty LoadingTextForegroundProperty =
+             DependencyProperty.Register("LoadingTextForeground", typeof(Brush), typeof(LoadingPage),
+             new FrameworkPropertyMetadata(Brushes.DarkSlateGray));
+         #endregion
+     }
+</code></pre>
+    </div>
+  </li>
+</ol>
+
+<p>　　</p>
+
+<p>大功告成！！！！上面的代码都是为了展示原理而分拆出来的零碎代码，如果想使用该控件，可以点下面的</p>
+
+<p><a href="http://files.cnblogs.com/files/Jarvin/Loading.rar">下载Demo下载</a></p>
+
+          </div>
+
+          <div class="ds-share" data-thread-key="/posts/WPF 蒙罩层 LoadingPage" data-title="WPF 蒙罩层 LoadingPage" data-images="" data-content="WPF 蒙罩层 LoadingPage" data-url="http://blog.kelvv.com//posts/WPF 蒙罩层 LoadingPage">
+              <div class="ds-share-inline">
+                <ul  class="ds-share-icons-16">
+                  
+                  <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+                  <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                  <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+                  <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+                  <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                  
+                </ul>
+                <div class="ds-share-icons-more">
+                </div>
+              </div>
+          </div>
+          <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="/posts/WPF 蒙罩层 LoadingPage" data-title="WPF 蒙罩层 LoadingPage" data-url="http://blog.kelvv.com//posts/WPF 蒙罩层 LoadingPage"></div>
+          <!-- 多说评论框 end -->
+          <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+          <script type="text/javascript">
+          var duoshuoQuery = {short_name:"kelvv"};
+            (function() {
+              var ds = document.createElement('script');
+              ds.type = 'text/javascript';ds.async = true;
+              ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+              ds.charset = 'UTF-8';
+              (document.getElementsByTagName('head')[0] 
+              || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+            </script>
+          <!-- 多说公共JS代码 end -->
+        </article>
+        <footer class="footer reveal">
+  
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+
+
+
+
+</body>
+</html>

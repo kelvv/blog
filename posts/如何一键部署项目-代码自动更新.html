@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>阿文的技术小岛 | 如何一键部署项目、代码自动更新</title>
+  <meta name="description" content="不管你代码部署到哪里，只要是git管理的，就可以通过这篇文章学习如何自动部署代码">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="如何一键部署项目、代码自动更新">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.kelvv.com//posts/%E5%A6%82%E4%BD%95%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE-%E4%BB%A3%E7%A0%81%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0">
+  <meta property="og:description" content="不管你代码部署到哪里，只要是git管理的，就可以通过这篇文章学习如何自动部署代码">
+  <meta property="og:site_name" content="阿文的技术小岛">
+  <meta property="og:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://blog.kelvv.com//posts/%E5%A6%82%E4%BD%95%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE-%E4%BB%A3%E7%A0%81%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0">
+  <meta name="twitter:title" content="如何一键部署项目、代码自动更新">
+  <meta name="twitter:description" content="不管你代码部署到哪里，只要是git管理的，就可以通过这篇文章学习如何自动部署代码">
+  <meta name="twitter:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="http://blog.kelvv.com//feed.xml" type="application/rss+xml" rel="alternate" title="阿文的技术小岛 Last 10 blog posts" />
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="/" class="header-logo" title="阿文的技术小岛">阿文的技术小岛</a>
+  <div class="cinc-totalPanel" user-id="585e945861ff4b006cdc3151"></div>
+  <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/totalPanel.min.js" charset="UTF-8"></script>
+  <ul class="header-links">
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/kelvv" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:kelvv@outlook.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>如何一键部署项目、代码自动更新</h1>
+            <p>不管你代码部署到哪里，只要是git管理的，就可以通过这篇文章学习如何自动部署代码</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                2016 - 09 - 18
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  1 分钟阅读
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/nodejs">nodejs</a>
+                
+              </div>
+            </div>
+            <span >
+              <div class="cinc-postPanel" user-id="585e945861ff4b006cdc3151" data-key="/posts/如何一键部署项目、代码自动更新" data-title="如何一键部署项目、代码自动更新" data-url="http://blog.kelvv.com//posts/如何一键部署项目、代码自动更新" isReadOnly=false></div>
+              <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/postPanel.min.js" charset="UTF-8"></script>
+            </span>
+          </header>
+
+          <div class="article-content">
+            <blockquote>
+  <p>my-deploy :  由nodejs写的一个自动更新工具，理论支持所有语言（php、java、c#）的项目，支持所有git仓库(bitbucket、github等)。</p>
+</blockquote>
+
+<p><a href="https://github.com/kelvv/my-deploy">github地址</a></p>
+
+<h2 id="效果如何">效果如何？</h2>
+
+<p>如果你的后端项目放在github、bitbucket等git仓库中管理 ， 在你的服务器中配置好mydeploy，它会根据你的配置，自动检查是否需要拉取最新代码 ， 并且自动帮助你更新。</p>
+
+<h2 id="支持方式">支持方式</h2>
+
+<ul>
+  <li><strong>webhook</strong>
+你需要在你的仓库的webhook中设置你的服务器地址＋端口，my-deploy接收到仓库的请求，会监测commit和tag，
+看是否需要拉取代码，如果需要，获取最新代码，此时借助pm2等可以达到自动更新重启的效果。</li>
+</ul>
+
+<p>配置文件：</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">{</span>
+     <span class="s2">"mode"</span><span class="err">:</span> <span class="s2">"webhook"</span><span class="p">,</span>
+     <span class="s2">"url"</span><span class="err">:</span> <span class="s2">"your project url of git use http"</span><span class="p">,</span>
+     <span class="s2">"localdir"</span><span class="err">:</span> <span class="s2">"/path/of/your/local/project"</span><span class="p">,</span>
+     <span class="s2">"branch"</span><span class="err">:</span> <span class="s2">"master"</span><span class="p">,</span>
+     <span class="s2">"port"</span><span class="err">:</span><span class="s2">"3100"</span>
+     <span class="s2">"rules"</span><span class="err">:</span> <span class="p">[</span>
+         <span class="p">{</span>
+             <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"tag"</span><span class="p">,</span>
+            <span class="s2">"value"</span><span class="p">:</span> <span class="s2">"[vV]\\d+"</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"commit"</span><span class="p">,</span>
+            <span class="s2">"value"</span><span class="p">:</span> <span class="s2">"#[\\s\\S]*?deploy\\s*[\\s\\S]*?77"</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span></code></pre></figure>
+
+<ul>
+  <li><strong>pullwatch</strong>
+设置好my-deploy的拉取间隔时间，它会定期获取项目是否需要更新，并作出相关更新工作。</li>
+</ul>
+
+<p>配置文件：</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">{</span>
+     <span class="s2">"mode"</span><span class="err">:</span> <span class="s2">"pullwatch"</span><span class="p">,</span>
+     <span class="s2">"url"</span><span class="err">:</span> <span class="s2">"your url of git use http"</span><span class="p">,</span>
+     <span class="s2">"localdir"</span><span class="err">:</span> <span class="s2">"/path/of/your/local/project"</span><span class="p">,</span>
+     <span class="s2">"interval"</span><span class="err">:</span> <span class="mi">3000</span><span class="p">,</span>
+     <span class="s2">"branch"</span><span class="err">:</span> <span class="s2">"master"</span><span class="p">,</span>
+     <span class="s2">"rules"</span><span class="err">:</span> <span class="p">[</span>
+         <span class="p">{</span>
+             <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"tag"</span><span class="p">,</span>
+            <span class="s2">"value"</span><span class="p">:</span> <span class="s2">"[vV]\\d+"</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"commit"</span><span class="p">,</span>
+            <span class="s2">"value"</span><span class="p">:</span> <span class="s2">"#[\\s\\S]*?deploy\\s*[\\s\\S]*?77"</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+ <span class="p">}</span></code></pre></figure>
+
+<div class="embed-responsive embed-responsive-16by9">
+<iframe src="http://player.youku.com/embed/XMTYxMjc0ODg3Mg==" frameborder="0" allowfullscreen=""></iframe>
+</div>
+
+<h2 id="总结">总结</h2>
+
+<p>简单、方便的部署，让你解放服务器的代码更新，专心写代码，直接push，服务端自动更新。可以由commit的信息中区分该提交是否需要更新的，灵活控制。</p>
+
+<p>该工具结合docker和集群效果更佳，更好玩。欢迎star , fork！谢谢</p>
+
+<p><a href="https://github.com/kelvv/my-deploy">github地址</a></p>
+
+          </div>
+
+          <div class="ds-share" data-thread-key="/posts/如何一键部署项目、代码自动更新" data-title="如何一键部署项目、代码自动更新" data-images="" data-content="如何一键部署项目、代码自动更新" data-url="http://blog.kelvv.com//posts/如何一键部署项目、代码自动更新">
+              <div class="ds-share-inline">
+                <ul  class="ds-share-icons-16">
+                  
+                  <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+                  <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                  <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+                  <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+                  <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                  
+                </ul>
+                <div class="ds-share-icons-more">
+                </div>
+              </div>
+          </div>
+          <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="/posts/如何一键部署项目、代码自动更新" data-title="如何一键部署项目、代码自动更新" data-url="http://blog.kelvv.com//posts/如何一键部署项目、代码自动更新"></div>
+          <!-- 多说评论框 end -->
+          <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+          <script type="text/javascript">
+          var duoshuoQuery = {short_name:"kelvv"};
+            (function() {
+              var ds = document.createElement('script');
+              ds.type = 'text/javascript';ds.async = true;
+              ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+              ds.charset = 'UTF-8';
+              (document.getElementsByTagName('head')[0] 
+              || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+            </script>
+          <!-- 多说公共JS代码 end -->
+        </article>
+        <footer class="footer reveal">
+  
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+
+
+
+
+</body>
+</html>

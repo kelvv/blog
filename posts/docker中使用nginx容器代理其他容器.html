@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>阿文的技术小岛 | docker中使用nginx容器代理其他容器</title>
+  <meta name="description" content="相信nginx大家也不陌生，大部分情况下都是在服务器中直接安装Nginx代理，但是如今Docker当道，如何结合Do...">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="docker中使用nginx容器代理其他容器">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.kelvv.com//posts/docker%E4%B8%AD%E4%BD%BF%E7%94%A8nginx%E5%AE%B9%E5%99%A8%E4%BB%A3%E7%90%86%E5%85%B6%E4%BB%96%E5%AE%B9%E5%99%A8">
+  <meta property="og:description" content="相信nginx大家也不陌生，大部分情况下都是在服务器中直接安装Nginx代理，但是如今Docker当道，如何结合Do...">
+  <meta property="og:site_name" content="阿文的技术小岛">
+  <meta property="og:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://blog.kelvv.com//posts/docker%E4%B8%AD%E4%BD%BF%E7%94%A8nginx%E5%AE%B9%E5%99%A8%E4%BB%A3%E7%90%86%E5%85%B6%E4%BB%96%E5%AE%B9%E5%99%A8">
+  <meta name="twitter:title" content="docker中使用nginx容器代理其他容器">
+  <meta name="twitter:description" content="相信nginx大家也不陌生，大部分情况下都是在服务器中直接安装Nginx代理，但是如今Docker当道，如何结合Do...">
+  <meta name="twitter:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="http://blog.kelvv.com//feed.xml" type="application/rss+xml" rel="alternate" title="阿文的技术小岛 Last 10 blog posts" />
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="/" class="header-logo" title="阿文的技术小岛">阿文的技术小岛</a>
+  <div class="cinc-totalPanel" user-id="585e945861ff4b006cdc3151"></div>
+  <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/totalPanel.min.js" charset="UTF-8"></script>
+  <ul class="header-links">
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/kelvv" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:kelvv@outlook.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>docker中使用nginx容器代理其他容器</h1>
+            <p>相信nginx大家也不陌生，大部分情况下都是在服务器中直接安装Nginx代理，但是如今Docker当道，如何结合Do...</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                2016 - 10 - 20
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  2 分钟阅读
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/docker">docker</a>
+                
+              </div>
+            </div>
+            <span >
+              <div class="cinc-postPanel" user-id="585e945861ff4b006cdc3151" data-key="/posts/docker中使用nginx容器代理其他容器" data-title="docker中使用nginx容器代理其他容器" data-url="http://blog.kelvv.com//posts/docker中使用nginx容器代理其他容器" isReadOnly=false></div>
+              <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/postPanel.min.js" charset="UTF-8"></script>
+            </span>
+          </header>
+
+          <div class="article-content">
+            <blockquote>
+  <p>Nginx  is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server, originally written by <a href="http://sysoev.ru/en/">Igor Sysoev</a></p>
+</blockquote>
+
+<h3 id="概述">概述</h3>
+
+<p>相信nginx大家也不陌生，大部分情况下都是在服务器中直接安装Nginx代理，但是如今Docker当道，如何结合Docker的容器化优势和Nginx的反向代理和域名设别？</p>
+
+<p>下面利用一个Demo，搭建一组服务</p>
+<ul>
+  <li>Nginx</li>
+  <li>Ghost</li>
+</ul>
+
+<p>利用Nginx容器内联到Ghost，转发，有以下优点：</p>
+<ol>
+  <li>服务器只需要开一个端口给Nginx容器作为入口</li>
+  <li>添加其他应用的时候，只需要在Nginx中配置转发规则就可以</li>
+  <li>所有应用自带开机重启</li>
+  <li>部署内容转变为文件形势，可轻松传递、维护</li>
+</ol>
+
+<p>放出Github地址： <a href="https://github.com/kelvv/docker-nginx-demo">docker-nginx-demo</a></p>
+
+<h3 id="准备">准备</h3>
+
+<p>需要准备Docker环境：</p>
+<ul>
+  <li><a href="https://docs.docker.com/engine/installation/linux/ubuntulinux/">docker-engine</a></li>
+  <li><a href="https://docs.docker.com/compose/install/">docker-compose</a></li>
+</ul>
+
+<h3 id="分析">分析</h3>
+
+<p>demo的文件结构：</p>
+
+<figure class="highlight"><pre><code class="language-markdown" data-lang="markdown"><span class="p">-</span> docker-compose.yml  //docker-compose所需的文件，用于描述所有应用的配置信息
+<span class="p">-</span> nginx
+<span class="p">   -</span> Dockerfile
+<span class="p">   -</span> sites-enabled
+<span class="p">      -</span> default   //nginx容器的配置文件，用于配置如何连接并解析其他的容器</code></pre></figure>
+
+<p>docker-compose.yml:</p>
+
+<figure class="highlight"><pre><code class="language-markdown" data-lang="markdown">version: "2"
+services:
+  ghost:
+    image : ghost
+    restart: always
+    container_name: ghost
+
+  nginx-host:
+    build: ./nginx
+    restart: always
+    ports:
+<span class="p">      -</span> "80:80"
+    links:
+<span class="p">      -</span> ghost
+    container_name: nginx-host</code></pre></figure>
+
+<p>注意： links节点是内联其他的容器，该处定义了两个容器，一个是Ghost，一个是Nginx，Nginx容器是基于./nginx文件夹进行build的，端口只需要开通80指向nginx容器即可，其他的全部有nginx负责转发</p>
+
+<p>Dockerfile：</p>
+
+<figure class="highlight"><pre><code class="language-markdown" data-lang="markdown">FROM tutum/nginx
+ADD sites-enabled/ /etc/nginx/sites-enabled</code></pre></figure>
+
+<p>sites-enabled/default:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">server</span> <span class="p">{</span>
+	<span class="err">#</span><span class="nx">listen</span> <span class="mi">443</span><span class="p">;</span>
+	<span class="nx">listen</span> <span class="mi">80</span><span class="p">;</span>
+   <span class="nx">server_name</span> <span class="nx">blog</span><span class="p">.</span><span class="nx">kelvv</span><span class="p">.</span><span class="nx">com</span>
+	<span class="err">#</span><span class="nx">ssl</span> <span class="nx">on</span><span class="p">;</span>
+	<span class="nx">access_log</span> <span class="o">/</span><span class="kd">var</span><span class="sr">/log/</span><span class="nx">nginx</span><span class="o">/</span><span class="nx">api</span><span class="o">-</span><span class="nx">dev</span><span class="p">.</span><span class="nx">log</span><span class="p">;</span>
+	<span class="nx">error_log</span> <span class="o">/</span><span class="kd">var</span><span class="sr">/log/</span><span class="nx">nginx</span><span class="o">/</span><span class="nx">api</span><span class="o">-</span><span class="nx">dev</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">log</span><span class="p">;</span>
+	<span class="nx">location</span> <span class="o">/</span> <span class="p">{</span>
+		<span class="nx">proxy_pass</span> 		<span class="na">http</span><span class="p">:</span><span class="c1">//ghost:2368;</span>
+		<span class="nx">proxy_set_header</span> 	<span class="nx">Host</span> <span class="nx">$host</span><span class="p">;</span>
+		<span class="nx">proxy_set_header</span> 	<span class="nx">X</span><span class="o">-</span><span class="nx">Real</span><span class="o">-</span><span class="nx">IP</span> <span class="nx">$remote_addr</span><span class="p">;</span>
+		<span class="nx">proxy_set_header</span>	<span class="nx">X</span><span class="o">-</span><span class="nx">Forwarded</span><span class="o">-</span><span class="nx">Proto</span> <span class="nx">https</span><span class="p">;</span>
+		<span class="nx">proxy_set_header</span> 	<span class="nx">X</span><span class="o">-</span><span class="nx">Forwarded</span><span class="o">-</span><span class="nx">For</span> <span class="nx">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+		<span class="nx">proxy_connect_timeout</span> 	<span class="mi">150</span><span class="p">;</span>
+		<span class="nx">proxy_send_timeout</span> 	<span class="mi">100</span><span class="p">;</span>
+		<span class="nx">proxy_read_timeout</span>	<span class="mi">100</span><span class="p">;</span>
+		<span class="nx">proxy_buffers</span>		<span class="mi">4</span> <span class="mi">32</span><span class="nx">k</span><span class="p">;</span>
+		<span class="nx">client_max_body_size</span>	<span class="mi">8</span><span class="nx">m</span><span class="p">;</span>
+		<span class="nx">client_body_buffer_size</span>	<span class="mi">128</span><span class="p">;</span>	
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>注意：该处的ghost就是刚才docker-compose文件内的links中的关联 , server_name为域名</p>
+
+<h3 id="运行">运行</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>$ cd docker-nginx-demo
+$ docker-compose up -d
+</code></pre>
+</div>
+
+<p>这个时候在浏览器中输入 域名就可以自动连接到Ghost ，服务器无污染</p>
+
+<h3 id="总结">总结</h3>
+<p>最好是使用一个端口，然后所有应用都是通过80端口连接服务器，通过域名区分不同应用。 
+还有一种方式就是使用多个端口，不同端口不同应用，这就需要在docker-compose.yml中开放多个端口，并且在nginx配置文件中配置多份server用于相应。</p>
+
+          </div>
+
+          <div class="ds-share" data-thread-key="/posts/docker中使用nginx容器代理其他容器" data-title="docker中使用nginx容器代理其他容器" data-images="" data-content="docker中使用nginx容器代理其他容器" data-url="http://blog.kelvv.com//posts/docker中使用nginx容器代理其他容器">
+              <div class="ds-share-inline">
+                <ul  class="ds-share-icons-16">
+                  
+                  <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+                  <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                  <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+                  <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+                  <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                  
+                </ul>
+                <div class="ds-share-icons-more">
+                </div>
+              </div>
+          </div>
+          <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="/posts/docker中使用nginx容器代理其他容器" data-title="docker中使用nginx容器代理其他容器" data-url="http://blog.kelvv.com//posts/docker中使用nginx容器代理其他容器"></div>
+          <!-- 多说评论框 end -->
+          <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+          <script type="text/javascript">
+          var duoshuoQuery = {short_name:"kelvv"};
+            (function() {
+              var ds = document.createElement('script');
+              ds.type = 'text/javascript';ds.async = true;
+              ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+              ds.charset = 'UTF-8';
+              (document.getElementsByTagName('head')[0] 
+              || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+            </script>
+          <!-- 多说公共JS代码 end -->
+        </article>
+        <footer class="footer reveal">
+  
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>阿文的技术小岛 | .NET 压缩解压库发布，支持进度查看</title>
+  <meta name="description" content="发布了一个 .net压缩解压库，基于SharpZipLib开发 ...">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content=".NET 压缩解压库发布，支持进度查看">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.kelvv.com//posts/net-%E5%8E%8B%E7%BC%A9%E8%A7%A3%E5%8E%8B%E5%BA%93%E5%8F%91%E5%B8%83-%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9F%A5%E7%9C%8B">
+  <meta property="og:description" content="发布了一个 .net压缩解压库，基于SharpZipLib开发 ...">
+  <meta property="og:site_name" content="阿文的技术小岛">
+  <meta property="og:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://blog.kelvv.com//posts/net-%E5%8E%8B%E7%BC%A9%E8%A7%A3%E5%8E%8B%E5%BA%93%E5%8F%91%E5%B8%83-%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9F%A5%E7%9C%8B">
+  <meta name="twitter:title" content=".NET 压缩解压库发布，支持进度查看">
+  <meta name="twitter:description" content="发布了一个 .net压缩解压库，基于SharpZipLib开发 ...">
+  <meta name="twitter:image" content="http://blog.kelvv.com//assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="http://blog.kelvv.com//feed.xml" type="application/rss+xml" rel="alternate" title="阿文的技术小岛 Last 10 blog posts" />
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="/" class="header-logo" title="阿文的技术小岛">阿文的技术小岛</a>
+  <div class="cinc-totalPanel" user-id="585e945861ff4b006cdc3151"></div>
+  <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/totalPanel.min.js" charset="UTF-8"></script>
+  <ul class="header-links">
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/kelvv" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:kelvv@outlook.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>.NET 压缩解压库发布，支持进度查看</h1>
+            <p>发布了一个 .net压缩解压库，基于SharpZipLib开发 ...</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                2014 - 10 - 10
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  1 分钟阅读
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/wpf">wpf</a>
+                
+              </div>
+            </div>
+            <span >
+              <div class="cinc-postPanel" user-id="585e945861ff4b006cdc3151" data-key="/posts/.NET 压缩解压库发布，支持进度查看" data-title=".NET 压缩解压库发布，支持进度查看" data-url="http://blog.kelvv.com//posts/.NET 压缩解压库发布，支持进度查看" isReadOnly=false></div>
+              <script type="text/javascript" async="" src="http://kelresource.oss-cn-shenzhen.aliyuncs.com/postPanel.min.js" charset="UTF-8"></script>
+            </span>
+          </header>
+
+          <div class="article-content">
+            <p>发布了一个 .net压缩解压库，基于SharpZipLib开发 ，支持进度查看，支持路径保持与否。
+<a href="">CL.IO.Zip</a> 是一个基于SharpZipLib的一个压缩和解压的类库，提供给用户在.net环境下使用（VB.NET,C#..等等）</p>
+
+<p>当前最新版本为：V1.1.0
+github地址：https://github.com/Jarvin-Guan/CL.IO.Zip    标个星
+百度网盘下载地址：http://pan.baidu.com/s/1qWwZ0LI</p>
+
+<p>欢迎各位自由下载源码，自由使用。
+ </p>
+<h3 id="cliozip">CL.IO.Zip</h3>
+<p><a href="https://github.com/Jarvin-Guan/CL.IO.Zip#cliozip-是一个基于sharpziplib的一个压缩和解压的类库提供给用户在net环境下使用vbnetc等等当前最新版本为v110"></a>    CL.IO.Zip 是一个基于SharpZipLib的一个压缩和解压的类库，提供给用户在.net环境下使用（VB.NET,C#..等等）当前最新版本为：V1.1.0
+    做任何操作之前，请使用单例模式，获取ZipHandler对象。
+<code class="highlighter-rouge">ZipHandler handler = ZipHandler.GetInstance();</code></p>
+
+<p>1.压缩</p>
+
+<p>1.1 压缩文件夹并获取压缩进度</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>  #Method：PackDirectory
+    public void PackDirectory(string strDirectory, string zipedFile, ProcessChange changedDG)
+
+    var fromDic="E:\ZipTest";\\需要压缩的文件夹路径
+
+    var toZip="E:\ZipFile.zip";\\生成压缩包的目标路径
+
+    handler.PackDirectory(fromDic, toZip, (num) =&gt; { Debug.WriteLine("pack num:" + num); });\\num为百分比，最大为100，可在此处写处理逻辑 
+</code></pre>
+</div>
+
+<p>1.2  添加文件到zip文件中。</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>#Method：AddFile 
+    public void AddFile(string filePath, string zipPath,string filePathInZip)
+
+    var filePath="E:\ReadyToAdd.txt";\\需要添加到压缩包的文件路径
+
+    var zipPath="E:\ZipFile.zip";\\压缩包文件路径
+
+    handler.AddFile(filePath, zipPath, @"123\" + Path.GetFileName(filePath));\\需要添加到压缩包的文件路径
+</code></pre>
+</div>
+
+<p>1.3 添加文件夹到zip文件中此函数支持是否保存文件路径的格式)    1.3添加文件夹到zip文件中(此函数支持是否保存文件路径的格式。)</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>#Method：AddDirectory
+    public void AddDirectory(string dicPath,string zipPath,string dicPathInZip,ProcessChange changedDG)
+
+    var dicPath="E:\ReadyToAddDic";\\需要添加到压缩包的文件夹路径
+
+    var zipPath="E:\ZipFile.zip";\\压缩包文件路径
+
+    var dicPathInZip="ReadyToAddDic";\\需要压缩到压缩包内的相对路径，当前值指的是根目录的ReadyToAddDic
+
+    handler.IsKeepPath=true;\\保存原路径
+
+    handler.AddDirectory(dicPath, zipPath, dicPathInZip,(num) =&gt; { Debug.WriteLine("压缩进度:" + num); }); 
+</code></pre>
+</div>
+
+<p>2.解压</p>
+
+<p>2.1 对压缩包进行解压。</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>#Method：UnpackAll
+    public void UnpackAll(string zipFilePath, string unzipPath, ProcessChange changedDG)
+
+    var fromZip="E:\ZipTest.zip";\\需要解压的压缩文件路径
+
+    var toDic="E:\ZipFile";\\解压到的文件夹路径
+
+    handler.UnpackAll(fromZip, toDic, (num) =&gt; { Debug.WriteLine("解压进度:" + num); }); 
+</code></pre>
+</div>
+
+<p>2.2 解压压缩包内的指定文件。</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>#Method：UnpackFile
+    public void UnpackFile(string zipFilePath,string unzipPath,string filePathInZip)
+
+    var fromZip="E:\ZipFile.zip";
+
+    var toDic="E:\UnZipTest";
+
+    handler.UnpackFile(fromZip, toDic, @"models/db.js"); 
+</code></pre>
+</div>
+
+<p>2.3 解压压缩包内的指定文件夹。</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>#Method：UnpackDirectory
+    public void UnpackDirectory(string zipFilePath, string unzipPath, string DicPathInZip)
+
+    var fromZip="E:\ZipFile.zip";\\压缩包文件路径
+
+    var toDic="E:\UnZipTest";
+
+    var dicPathInZip="node_modules"; 
+
+    handler.IsKeepPath=true;\\保存原路径
+
+    handler.UnpackDirectory(fromZip, toDic, dicPathInZip);
+</code></pre>
+</div>
+
+          </div>
+
+          <div class="ds-share" data-thread-key="/posts/.NET 压缩解压库发布，支持进度查看" data-title=".NET 压缩解压库发布，支持进度查看" data-images="" data-content=".NET 压缩解压库发布，支持进度查看" data-url="http://blog.kelvv.com//posts/.NET 压缩解压库发布，支持进度查看">
+              <div class="ds-share-inline">
+                <ul  class="ds-share-icons-16">
+                  
+                  <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+                  <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                  <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+                  <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+                  <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                  
+                </ul>
+                <div class="ds-share-icons-more">
+                </div>
+              </div>
+          </div>
+          <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="/posts/.NET 压缩解压库发布，支持进度查看" data-title=".NET 压缩解压库发布，支持进度查看" data-url="http://blog.kelvv.com//posts/.NET 压缩解压库发布，支持进度查看"></div>
+          <!-- 多说评论框 end -->
+          <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+          <script type="text/javascript">
+          var duoshuoQuery = {short_name:"kelvv"};
+            (function() {
+              var ds = document.createElement('script');
+              ds.type = 'text/javascript';ds.async = true;
+              ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+              ds.charset = 'UTF-8';
+              (document.getElementsByTagName('head')[0] 
+              || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+            </script>
+          <!-- 多说公共JS代码 end -->
+        </article>
+        <footer class="footer reveal">
+  
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+
+
+
+
+</body>
+</html>
